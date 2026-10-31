@@ -53,6 +53,7 @@ class SayDoSDK {
   private narrationText: string = '';
   private narrationSource: 'voice' | 'typed' = 'typed';
   private recordingTitle: string = '';
+  private showJudgeBanner: boolean = true;
 
   private getNarrationWordCount(): number {
     const text = this.narrationText.trim();
@@ -89,10 +90,23 @@ class SayDoSDK {
     this.mountWidget();
     this.fetchAppStats();
 
+    if (typeof window !== 'undefined' && sessionStorage.getItem('saydo_dismiss_judge_banner') === 'true') {
+      this.showJudgeBanner = false;
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('saydo') === 'teach' || localStorage.getItem('saydo_mode') === 'teach') {
       this.activeTab = 'teach';
       this.isOpen = true;
+    } else if (
+      urlParams.get('saydo') === 'judge' ||
+      urlParams.get('judge') === 'true' ||
+      urlParams.get('saydo') === 'ask' ||
+      urlParams.get('demo') === 'judge'
+    ) {
+      this.activeTab = 'ask';
+      this.isOpen = true;
+      this.showJudgeBanner = true;
     }
 
     this.render();
@@ -1123,6 +1137,27 @@ class SayDoSDK {
               : `
             <!-- Ask Agent View -->
             ${
+              this.showJudgeBanner
+                ? `
+              <div class="saydo-judge-banner" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(59, 130, 246, 0.15)); border: 1px solid rgba(168, 85, 247, 0.35); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: 11px; color: #f1f5f9; display: flex; flex-direction: column; gap: 4px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                  <div style="font-weight: 700; color: #c084fc; display: flex; align-items: center; gap: 6px;">
+                    <span>⚖️</span>
+                    <span>Judge Quickstart Guide</span>
+                  </div>
+                  <button id="btn-dismiss-judge-banner" style="background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer; padding: 0 4px; line-height: 1;" title="Dismiss">&times;</button>
+                </div>
+                <div style="font-size: 11px; line-height: 1.45; color: #cbd5e1;">
+                  <strong>Step 1:</strong> Click a prompt chip below or hold your Wispr key and speak.<br/>
+                  <strong>Step 2:</strong> Watch the deterministic policy check execute in real-time.<br/>
+                  <strong>Step 3:</strong> Confirm write actions with human-in-the-loop safety.
+                </div>
+              </div>
+            `
+                : ''
+            }
+
+            ${
               this.activePlan
                 ? `
               <div class="saydo-plan-box">
@@ -1143,22 +1178,22 @@ class SayDoSDK {
               </div>
             `
                 : `
-              <div style="font-size: 11px; color: #94a3b8; font-weight: 600;">SUGGESTED PROMPTS</div>
+              <div style="font-size: 11px; color: #94a3b8; font-weight: 600; display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <span>SUGGESTED PROMPTS FOR JUDGES</span>
+                <span style="font-size: 10px; color: #c084fc; font-weight: 500;">Click to run</span>
+              </div>
               <div class="saydo-chips">
-                <button class="saydo-chip" data-prompt="Can I reopen a rejected application?">
-                  📚 Can I reopen a rejected application? (Tavily Docs)
+                <button class="saydo-chip" data-prompt="List all active projects and budgets">
+                  📋 List all active projects and budgets
                 </button>
-                <button class="saydo-chip" data-prompt="Create Website Revamp with 2 lakh budget and invite arpit@dehix.org as editor">
-                  ⚡ Create Website Revamp (2L) & invite arpit@dehix.org
+                <button class="saydo-chip" data-prompt="Create Website Revamp for 2 lakh">
+                  ⚡ Create Website Revamp for 2 lakh
                 </button>
-                <button class="saydo-chip" data-prompt="Create a project with 20 lakh budget">
-                  🛑 Create 20 lakh project (test policy limit)
+                <button class="saydo-chip" data-prompt="Invite mentor@dehix.xyz as editor">
+                  👥 Invite mentor@dehix.xyz as editor
                 </button>
-                <button class="saydo-chip" data-prompt="Show pending applications">
-                  🔍 Show pending applications
-                </button>
-                <button class="saydo-chip" data-prompt="Invite arpit@dehix.org as admin">
-                  🛡️ Invite arpit@dehix.org as admin (test role block)
+                <button class="saydo-chip" data-prompt="Try to create a project with 15 lakh budget">
+                  🛑 Try to create a project with 15 lakh budget <span style="color: #f87171; font-size: 9px; margin-left: 2px;">(test policy block!)</span>
                 </button>
               </div>
             `
@@ -1402,6 +1437,14 @@ class SayDoSDK {
         const sourceColor = this.narrationSource === 'voice' ? '#c084fc' : '#64748b';
         countEl.innerHTML = `<span>${words} words</span><span style="color: ${sourceColor}; font-weight: 500;">${sourceLabel}</span>`;
       }
+    });
+
+    this.shadowRoot.getElementById('btn-dismiss-judge-banner')?.addEventListener('click', () => {
+      this.showJudgeBanner = false;
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('saydo_dismiss_judge_banner', 'true');
+      }
+      this.render();
     });
 
     this.shadowRoot.getElementById('btn-save-recording')?.addEventListener('click', () => this.saveRecording());

@@ -21,9 +21,57 @@ import { logger } from '../lib/logger.js';
 
 export const chatRouter: Router = Router();
 
+interface RateLimitRecord {
+  count: number;
+  resetAt: number;
+}
+
+const ipRateLimits = new Map<string, RateLimitRecord>();
+const RATE_LIMIT_MAX = 30;
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+function checkIpRateLimit(ip: string): { allowed: boolean; remaining: number; resetAt: number } {
+  const now = Date.now();
+  let record = ipRateLimits.get(ip);
+
+  if (!record || now > record.resetAt) {
+    record = { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS };
+    ipRateLimits.set(ip, record);
+    return { allowed: true, remaining: RATE_LIMIT_MAX - 1, resetAt: record.resetAt };
+  }
+
+  if (record.count >= RATE_LIMIT_MAX) {
+    return { allowed: false, remaining: 0, resetAt: record.resetAt };
+  }
+
+  record.count += 1;
+  return { allowed: true, remaining: RATE_LIMIT_MAX - record.count, resetAt: record.resetAt };
+}
+
 chatRouter.post('/', async (req: Request, res: Response) => {
   const startTime = Date.now();
   const { app_key, messages = [], pending_result, run_id: incomingRunId } = req.body;
+
+  const rawIp = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || req.ip || '127.0.0.1';
+  const clientIp = rawIp.split(',')[0].trim();
+
+  // Rate limiting applies to new user turns (not tool execution callbacks/pending_result)
+  if (!pending_result) {
+    const rateCheck = checkIpRateLimit(clientIp);
+    res.setHeader('X-RateLimit-Limit', RATE_LIMIT_MAX.toString());
+    res.setHeader('X-RateLimit-Remaining', rateCheck.remaining.toString());
+    res.setHeader('X-RateLimit-Reset', Math.ceil(rateCheck.resetAt / 1000).toString());
+
+    if (!rateCheck.allowed) {
+      const minutesLeft = Math.ceil((rateCheck.resetAt - Date.now()) / 60000);
+      logger.warn({ clientIp, minutesLeft }, 'Judge demo rate limit reached for IP');
+      return res.status(429).json({
+        type: 'message',
+        error: `Demo rate limit reached: 30 agent turns per IP per hour to protect Nebius GPU compute for all hackathon judges. Resets in ~${minutesLeft}m.`,
+        text: `⏳ Demo rate limit reached (30 agent turns per IP per hour to protect Nebius GPU compute for all hackathon judges). Your limit resets in ~${minutesLeft} minute(s). You can explore existing telemetry runs and evals at /studio/runs!`,
+      });
+    }
+  }
 
   if (!app_key) {
     return res.status(400).json({ error: 'app_key is required' });

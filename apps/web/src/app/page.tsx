@@ -79,6 +79,13 @@ export default function Home() {
 
         <div className="flex items-center gap-3 text-xs">
           <Link
+            href="/projects?saydo=judge"
+            className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-bold transition-all shadow-md shadow-purple-500/20 flex items-center gap-1.5"
+          >
+            <span>⚖️ Try it as a Judge</span>
+          </Link>
+
+          <Link
             href="/studio/voice"
             className="px-3.5 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 font-semibold border border-purple-500/30 transition-all flex items-center gap-1.5"
           >
@@ -90,14 +97,14 @@ export default function Home() {
             href="/studio"
             className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition-all flex items-center gap-1.5"
           >
-            <span>Studio Control Plane</span>
+            <span>Studio</span>
           </Link>
 
           <Link
             href="/projects"
-            className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 text-black font-bold transition-all shadow-md shadow-emerald-500/20 flex items-center gap-1.5"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold border border-slate-700 transition-all flex items-center gap-1.5"
           >
-            <span>DEHIX-lite Demo</span>
+            <span>DEHIX-lite</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -127,11 +134,11 @@ export default function Home() {
         {/* Hero CTAs */}
         <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
           <Link
-            href="/projects"
-            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 text-black font-bold text-sm shadow-xl shadow-emerald-500/25 transition-all flex items-center gap-2"
+            href="/projects?saydo=judge"
+            className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 text-white font-extrabold text-sm shadow-xl shadow-purple-500/25 transition-all flex items-center gap-2 transform hover:-translate-y-0.5"
           >
-            <Play className="w-4 h-4 fill-black" />
-            <span>Try the DEHIX-lite demo</span>
+            <span>⚖️ Try it as a Judge (Live Demo)</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
 
           <Link
