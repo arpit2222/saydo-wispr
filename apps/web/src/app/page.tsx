@@ -70,8 +70,9 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-2">
             <span className="font-bold text-white text-base tracking-tight">SayDo</span>
-            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              Nebius x NVIDIA
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 flex items-center gap-1">
+              <span>🎙️</span>
+              <span>Wispr Flow</span>
             </span>
           </div>
         </div>
@@ -109,7 +110,8 @@ export default function Home() {
         </h1>
 
         <p className="text-base sm:text-lg text-slate-400 max-w-2xl font-normal leading-relaxed">
-          Built on <span className="text-slate-200 font-semibold">NVIDIA Nemotron</span> via{' '}
+          Powered by <span className="text-purple-300 font-semibold">Wispr Flow</span> ·{' '}
+          <span className="text-slate-200 font-semibold">NVIDIA Nemotron</span> via{' '}
           <span className="text-slate-200 font-semibold">Nebius Token Factory</span> ·{' '}
           <span className="text-slate-200 font-semibold">Tavily</span>
         </p>

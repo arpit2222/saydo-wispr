@@ -1048,18 +1048,24 @@ class SayDoSDK {
             </div>
 
             <div>
-              <div class="saydo-label">Tell Narration (Wispr / Voice Mic)</div>
+              <div class="saydo-label" style="display: flex; align-items: center; justify-content: space-between;">
+                <span>Tell Narration</span>
+                <span class="saydo-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.35); font-size: 9px; font-weight: 600;">
+                  🎙️ Powered by Wispr Flow
+                </span>
+              </div>
               <div style="position: relative;">
                 <textarea 
                   class="saydo-textarea" 
                   id="textarea-narration" 
                   rows="3" 
-                  placeholder="Talk aloud while doing the task..."
+                  placeholder="Speak naturally with Wispr Flow while clicking (e.g. 'I am creating Website Revamp with 2 lakh budget...')..."
                 >${this.narrationText}</textarea>
-                <button class="saydo-icon-btn" id="btn-mic-teach" style="position: absolute; right: 8px; bottom: 8px;" title="Dictate voice">
+                <button class="saydo-icon-btn" id="btn-mic-teach" style="position: absolute; right: 8px; bottom: 8px; background: ${this.isListening ? '#ef4444' : '#7c3aed'}; color: white;" title="Dictate with Wispr Flow">
                   ${this.isListening ? '🛑' : '🎙️'}
                 </button>
               </div>
+              ${this.isListening ? '<div style="font-size: 10px; color: #c084fc; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;"><span class="saydo-indicator" style="background: #c084fc; box-shadow: 0 0 8px #c084fc;"></span> Wispr Flow listening... Speak aloud at your normal pace.</div>' : ''}
             </div>
 
             <div>

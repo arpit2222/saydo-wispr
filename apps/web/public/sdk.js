@@ -1,7 +1,7 @@
 var Ve = Object.defineProperty;
 var Ue = (a, e, t) => e in a ? Ve(a, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : a[e] = t;
 var w = (a, e, t) => Ue(a, typeof e != "symbol" ? e + "" : e, t);
-var b;
+var x;
 (function(a) {
   a.assertEqual = (n) => {
   };
@@ -37,16 +37,16 @@ var b;
     return n.map((r) => typeof r == "string" ? `'${r}'` : r).join(i);
   }
   a.joinValues = s, a.jsonStringifyReplacer = (n, i) => typeof i == "bigint" ? i.toString() : i;
-})(b || (b = {}));
-var be;
+})(x || (x = {}));
+var xe;
 (function(a) {
   a.mergeShapes = (e, t) => ({
     ...e,
     ...t
     // second overwrites first
   });
-})(be || (be = {}));
-const l = b.arrayToEnum([
+})(xe || (xe = {}));
+const l = x.arrayToEnum([
   "string",
   "nan",
   "number",
@@ -88,7 +88,7 @@ const l = b.arrayToEnum([
     default:
       return l.unknown;
   }
-}, d = b.arrayToEnum([
+}, d = x.arrayToEnum([
   "invalid_type",
   "invalid_literal",
   "custom",
@@ -150,7 +150,7 @@ class N extends Error {
     return this.message;
   }
   get message() {
-    return JSON.stringify(this.issues, b.jsonStringifyReplacer, 2);
+    return JSON.stringify(this.issues, x.jsonStringifyReplacer, 2);
   }
   get isEmpty() {
     return this.issues.length === 0;
@@ -177,19 +177,19 @@ const le = (a, e) => {
       a.received === l.undefined ? t = "Required" : t = `Expected ${a.expected}, received ${a.received}`;
       break;
     case d.invalid_literal:
-      t = `Invalid literal value, expected ${JSON.stringify(a.expected, b.jsonStringifyReplacer)}`;
+      t = `Invalid literal value, expected ${JSON.stringify(a.expected, x.jsonStringifyReplacer)}`;
       break;
     case d.unrecognized_keys:
-      t = `Unrecognized key(s) in object: ${b.joinValues(a.keys, ", ")}`;
+      t = `Unrecognized key(s) in object: ${x.joinValues(a.keys, ", ")}`;
       break;
     case d.invalid_union:
       t = "Invalid input";
       break;
     case d.invalid_union_discriminator:
-      t = `Invalid discriminator value. Expected ${b.joinValues(a.options)}`;
+      t = `Invalid discriminator value. Expected ${x.joinValues(a.options)}`;
       break;
     case d.invalid_enum_value:
-      t = `Invalid enum value. Expected ${b.joinValues(a.options)}, received '${a.received}'`;
+      t = `Invalid enum value. Expected ${x.joinValues(a.options)}, received '${a.received}'`;
       break;
     case d.invalid_arguments:
       t = "Invalid function arguments";
@@ -201,7 +201,7 @@ const le = (a, e) => {
       t = "Invalid date";
       break;
     case d.invalid_string:
-      typeof a.validation == "object" ? "includes" in a.validation ? (t = `Invalid input: must include "${a.validation.includes}"`, typeof a.validation.position == "number" && (t = `${t} at one or more positions greater than or equal to ${a.validation.position}`)) : "startsWith" in a.validation ? t = `Invalid input: must start with "${a.validation.startsWith}"` : "endsWith" in a.validation ? t = `Invalid input: must end with "${a.validation.endsWith}"` : b.assertNever(a.validation) : a.validation !== "regex" ? t = `Invalid ${a.validation}` : t = "Invalid";
+      typeof a.validation == "object" ? "includes" in a.validation ? (t = `Invalid input: must include "${a.validation.includes}"`, typeof a.validation.position == "number" && (t = `${t} at one or more positions greater than or equal to ${a.validation.position}`)) : "startsWith" in a.validation ? t = `Invalid input: must start with "${a.validation.startsWith}"` : "endsWith" in a.validation ? t = `Invalid input: must end with "${a.validation.endsWith}"` : x.assertNever(a.validation) : a.validation !== "regex" ? t = `Invalid ${a.validation}` : t = "Invalid";
       break;
     case d.too_small:
       a.type === "array" ? t = `Array must contain ${a.exact ? "exactly" : a.inclusive ? "at least" : "more than"} ${a.minimum} element(s)` : a.type === "string" ? t = `String must contain ${a.exact ? "exactly" : a.inclusive ? "at least" : "over"} ${a.minimum} character(s)` : a.type === "number" ? t = `Number must be ${a.exact ? "exactly equal to " : a.inclusive ? "greater than or equal to " : "greater than "}${a.minimum}` : a.type === "bigint" ? t = `Number must be ${a.exact ? "exactly equal to " : a.inclusive ? "greater than or equal to " : "greater than "}${a.minimum}` : a.type === "date" ? t = `Date must be ${a.exact ? "exactly equal to " : a.inclusive ? "greater than or equal to " : "greater than "}${new Date(Number(a.minimum))}` : t = "Invalid input";
@@ -222,7 +222,7 @@ const le = (a, e) => {
       t = "Number must be finite";
       break;
     default:
-      t = e.defaultError, b.assertNever(a);
+      t = e.defaultError, x.assertNever(a);
   }
   return { message: t };
 };
@@ -351,7 +351,7 @@ function y(a) {
     return r.code === "invalid_enum_value" ? { message: u ?? o.defaultError } : typeof o.data > "u" ? { message: u ?? s ?? o.defaultError } : r.code !== "invalid_type" ? { message: o.defaultError } : { message: u ?? t ?? o.defaultError };
   }, description: n };
 }
-class x {
+class b {
   get description() {
     return this._def.description;
   }
@@ -606,7 +606,7 @@ function ht(a, e) {
 function pt(a, e) {
   return !!((e === "v4" || !e) && at.test(a) || (e === "v6" || !e) && nt.test(a));
 }
-class O extends x {
+class O extends b {
   _parse(e) {
     if (this._def.coerce && (e.data = String(e.data)), this._getType(e) !== l.string) {
       const i = this._getOrReturnCtx(e);
@@ -758,7 +758,7 @@ class O extends x {
         validation: "base64url",
         code: d.invalid_string,
         message: i.message
-      }), s.dirty()) : b.assertNever(i);
+      }), s.dirty()) : x.assertNever(i);
     return { status: s.value, value: e.data };
   }
   _regex(e, t, s) {
@@ -993,7 +993,7 @@ function ft(a, e) {
   const t = (a.toString().split(".")[1] || "").length, s = (e.toString().split(".")[1] || "").length, n = t > s ? t : s, i = Number.parseInt(a.toFixed(n).replace(".", "")), r = Number.parseInt(e.toFixed(n).replace(".", ""));
   return i % r / 10 ** n;
 }
-class W extends x {
+class W extends b {
   constructor() {
     super(...arguments), this.min = this.gte, this.max = this.lte, this.step = this.multipleOf;
   }
@@ -1009,7 +1009,7 @@ class W extends x {
     let s;
     const n = new S();
     for (const i of this._def.checks)
-      i.kind === "int" ? b.isInteger(e.data) || (s = this._getOrReturnCtx(e, s), c(s, {
+      i.kind === "int" ? x.isInteger(e.data) || (s = this._getOrReturnCtx(e, s), c(s, {
         code: d.invalid_type,
         expected: "integer",
         received: "float",
@@ -1035,7 +1035,7 @@ class W extends x {
       }), n.dirty()) : i.kind === "finite" ? Number.isFinite(e.data) || (s = this._getOrReturnCtx(e, s), c(s, {
         code: d.not_finite,
         message: i.message
-      }), n.dirty()) : b.assertNever(i);
+      }), n.dirty()) : x.assertNever(i);
     return { status: n.value, value: e.data };
   }
   gte(e, t) {
@@ -1147,7 +1147,7 @@ class W extends x {
     return e;
   }
   get isInt() {
-    return !!this._def.checks.find((e) => e.kind === "int" || e.kind === "multipleOf" && b.isInteger(e.value));
+    return !!this._def.checks.find((e) => e.kind === "int" || e.kind === "multipleOf" && x.isInteger(e.value));
   }
   get isFinite() {
     let e = null, t = null;
@@ -1165,7 +1165,7 @@ W.create = (a) => new W({
   coerce: (a == null ? void 0 : a.coerce) || !1,
   ...y(a)
 });
-class Q extends x {
+class Q extends b {
   constructor() {
     super(...arguments), this.min = this.gte, this.max = this.lte;
   }
@@ -1197,7 +1197,7 @@ class Q extends x {
         code: d.not_multiple_of,
         multipleOf: i.value,
         message: i.message
-      }), n.dirty()) : b.assertNever(i);
+      }), n.dirty()) : x.assertNever(i);
     return { status: n.value, value: e.data };
   }
   _getInvalidInput(e) {
@@ -1298,7 +1298,7 @@ Q.create = (a) => new Q({
   coerce: (a == null ? void 0 : a.coerce) ?? !1,
   ...y(a)
 });
-class ue extends x {
+class ue extends b {
   _parse(e) {
     if (this._def.coerce && (e.data = !!e.data), this._getType(e) !== l.boolean) {
       const s = this._getOrReturnCtx(e);
@@ -1316,7 +1316,7 @@ ue.create = (a) => new ue({
   coerce: (a == null ? void 0 : a.coerce) || !1,
   ...y(a)
 });
-class ae extends x {
+class ae extends b {
   _parse(e) {
     if (this._def.coerce && (e.data = new Date(e.data)), this._getType(e) !== l.date) {
       const i = this._getOrReturnCtx(e);
@@ -1349,7 +1349,7 @@ class ae extends x {
         exact: !1,
         maximum: i.value,
         type: "date"
-      }), s.dirty()) : b.assertNever(i);
+      }), s.dirty()) : x.assertNever(i);
     return {
       status: s.value,
       value: new Date(e.data.getTime())
@@ -1394,7 +1394,7 @@ ae.create = (a) => new ae({
   typeName: f.ZodDate,
   ...y(a)
 });
-class Te extends x {
+class Te extends b {
   _parse(e) {
     if (this._getType(e) !== l.symbol) {
       const s = this._getOrReturnCtx(e);
@@ -1411,7 +1411,7 @@ Te.create = (a) => new Te({
   typeName: f.ZodSymbol,
   ...y(a)
 });
-class Se extends x {
+class Se extends b {
   _parse(e) {
     if (this._getType(e) !== l.undefined) {
       const s = this._getOrReturnCtx(e);
@@ -1428,7 +1428,7 @@ Se.create = (a) => new Se({
   typeName: f.ZodUndefined,
   ...y(a)
 });
-class Re extends x {
+class Re extends b {
   _parse(e) {
     if (this._getType(e) !== l.null) {
       const s = this._getOrReturnCtx(e);
@@ -1445,7 +1445,7 @@ Re.create = (a) => new Re({
   typeName: f.ZodNull,
   ...y(a)
 });
-class he extends x {
+class he extends b {
   constructor() {
     super(...arguments), this._any = !0;
   }
@@ -1457,7 +1457,7 @@ he.create = (a) => new he({
   typeName: f.ZodAny,
   ...y(a)
 });
-class Ce extends x {
+class Ce extends b {
   constructor() {
     super(...arguments), this._unknown = !0;
   }
@@ -1469,7 +1469,7 @@ Ce.create = (a) => new Ce({
   typeName: f.ZodUnknown,
   ...y(a)
 });
-class z extends x {
+class z extends b {
   _parse(e) {
     const t = this._getOrReturnCtx(e);
     return c(t, {
@@ -1483,7 +1483,7 @@ z.create = (a) => new z({
   typeName: f.ZodNever,
   ...y(a)
 });
-class Ee extends x {
+class Ee extends b {
   _parse(e) {
     if (this._getType(e) !== l.undefined) {
       const s = this._getOrReturnCtx(e);
@@ -1500,7 +1500,7 @@ Ee.create = (a) => new Ee({
   typeName: f.ZodVoid,
   ...y(a)
 });
-class A extends x {
+class A extends b {
   _parse(e) {
     const { ctx: t, status: s } = this._processInputParams(e), n = this._def;
     if (t.parsedType !== l.array)
@@ -1589,14 +1589,14 @@ function V(a) {
     type: V(a.element)
   }) : a instanceof Z ? Z.create(V(a.unwrap())) : a instanceof G ? G.create(V(a.unwrap())) : a instanceof B ? B.create(a.items.map((e) => V(e))) : a;
 }
-class _ extends x {
+class _ extends b {
   constructor() {
     super(...arguments), this._cached = null, this.nonstrict = this.passthrough, this.augment = this.extend;
   }
   _getCached() {
     if (this._cached !== null)
       return this._cached;
-    const e = this._def.shape(), t = b.objectKeys(e);
+    const e = this._def.shape(), t = x.objectKeys(e);
     return this._cached = { shape: e, keys: t }, this._cached;
   }
   _parse(e) {
@@ -1803,7 +1803,7 @@ class _ extends x {
   }
   pick(e) {
     const t = {};
-    for (const s of b.objectKeys(e))
+    for (const s of x.objectKeys(e))
       e[s] && this.shape[s] && (t[s] = this.shape[s]);
     return new _({
       ...this._def,
@@ -1812,7 +1812,7 @@ class _ extends x {
   }
   omit(e) {
     const t = {};
-    for (const s of b.objectKeys(this.shape))
+    for (const s of x.objectKeys(this.shape))
       e[s] || (t[s] = this.shape[s]);
     return new _({
       ...this._def,
@@ -1827,7 +1827,7 @@ class _ extends x {
   }
   partial(e) {
     const t = {};
-    for (const s of b.objectKeys(this.shape)) {
+    for (const s of x.objectKeys(this.shape)) {
       const n = this.shape[s];
       e && !e[s] ? t[s] = n : t[s] = n.optional();
     }
@@ -1838,7 +1838,7 @@ class _ extends x {
   }
   required(e) {
     const t = {};
-    for (const s of b.objectKeys(this.shape))
+    for (const s of x.objectKeys(this.shape))
       if (e && !e[s])
         t[s] = this.shape[s];
       else {
@@ -1853,7 +1853,7 @@ class _ extends x {
     });
   }
   keyof() {
-    return Ze(b.objectKeys(this.shape));
+    return Ze(x.objectKeys(this.shape));
   }
 }
 _.create = (a, e) => new _({
@@ -1877,7 +1877,7 @@ _.lazycreate = (a, e) => new _({
   typeName: f.ZodObject,
   ...y(e)
 });
-class ie extends x {
+class ie extends b {
   _parse(e) {
     const { ctx: t } = this._processInputParams(e), s = this._def.options;
     function n(i) {
@@ -1955,7 +1955,7 @@ function pe(a, e) {
   if (a === e)
     return { valid: !0, data: a };
   if (t === l.object && s === l.object) {
-    const n = b.objectKeys(e), i = b.objectKeys(a).filter((o) => n.indexOf(o) !== -1), r = { ...a, ...e };
+    const n = x.objectKeys(e), i = x.objectKeys(a).filter((o) => n.indexOf(o) !== -1), r = { ...a, ...e };
     for (const o of i) {
       const u = pe(a[o], e[o]);
       if (!u.valid)
@@ -1976,7 +1976,7 @@ function pe(a, e) {
     return { valid: !0, data: n };
   } else return t === l.date && s === l.date && +a == +e ? { valid: !0, data: a } : { valid: !1 };
 }
-class ne extends x {
+class ne extends b {
   _parse(e) {
     const { status: t, ctx: s } = this._processInputParams(e), n = (i, r) => {
       if (_e(i) || _e(r))
@@ -2014,7 +2014,7 @@ ne.create = (a, e, t) => new ne({
   typeName: f.ZodIntersection,
   ...y(t)
 });
-class B extends x {
+class B extends b {
   _parse(e) {
     const { status: t, ctx: s } = this._processInputParams(e);
     if (s.parsedType !== l.array)
@@ -2064,7 +2064,7 @@ B.create = (a, e) => {
     ...y(e)
   });
 };
-class re extends x {
+class re extends b {
   get keySchema() {
     return this._def.keyType;
   }
@@ -2092,7 +2092,7 @@ class re extends x {
     return this._def.valueType;
   }
   static create(e, t, s) {
-    return t instanceof x ? new re({
+    return t instanceof b ? new re({
       keyType: e,
       valueType: t,
       typeName: f.ZodRecord,
@@ -2105,7 +2105,7 @@ class re extends x {
     });
   }
 }
-class Ae extends x {
+class Ae extends b {
   get keySchema() {
     return this._def.keyType;
   }
@@ -2153,7 +2153,7 @@ Ae.create = (a, e, t) => new Ae({
   typeName: f.ZodMap,
   ...y(t)
 });
-class ee extends x {
+class ee extends b {
   _parse(e) {
     const { status: t, ctx: s } = this._processInputParams(e);
     if (s.parsedType !== l.set)
@@ -2217,7 +2217,7 @@ ee.create = (a, e) => new ee({
   typeName: f.ZodSet,
   ...y(e)
 });
-class $e extends x {
+class $e extends b {
   get schema() {
     return this._def.getter();
   }
@@ -2231,7 +2231,7 @@ $e.create = (a, e) => new $e({
   typeName: f.ZodLazy,
   ...y(e)
 });
-class fe extends x {
+class fe extends b {
   _parse(e) {
     if (e.data !== this._def.value) {
       const t = this._getOrReturnCtx(e);
@@ -2259,12 +2259,12 @@ function Ze(a, e) {
     ...y(e)
   });
 }
-class F extends x {
+class F extends b {
   _parse(e) {
     if (typeof e.data != "string") {
       const t = this._getOrReturnCtx(e), s = this._def.values;
       return c(t, {
-        expected: b.joinValues(s),
+        expected: x.joinValues(s),
         received: t.parsedType,
         code: d.invalid_type
       }), g;
@@ -2314,19 +2314,19 @@ class F extends x {
   }
 }
 F.create = Ze;
-class Ie extends x {
+class Ie extends b {
   _parse(e) {
-    const t = b.getValidEnumValues(this._def.values), s = this._getOrReturnCtx(e);
+    const t = x.getValidEnumValues(this._def.values), s = this._getOrReturnCtx(e);
     if (s.parsedType !== l.string && s.parsedType !== l.number) {
-      const n = b.objectValues(t);
+      const n = x.objectValues(t);
       return c(s, {
-        expected: b.joinValues(n),
+        expected: x.joinValues(n),
         received: s.parsedType,
         code: d.invalid_type
       }), g;
     }
-    if (this._cache || (this._cache = new Set(b.getValidEnumValues(this._def.values))), !this._cache.has(e.data)) {
-      const n = b.objectValues(t);
+    if (this._cache || (this._cache = new Set(x.getValidEnumValues(this._def.values))), !this._cache.has(e.data)) {
+      const n = x.objectValues(t);
       return c(s, {
         received: s.data,
         code: d.invalid_enum_value,
@@ -2344,7 +2344,7 @@ Ie.create = (a, e) => new Ie({
   typeName: f.ZodNativeEnum,
   ...y(e)
 });
-class oe extends x {
+class oe extends b {
   unwrap() {
     return this._def.type;
   }
@@ -2368,7 +2368,7 @@ oe.create = (a, e) => new oe({
   typeName: f.ZodPromise,
   ...y(e)
 });
-class X extends x {
+class X extends b {
   innerType() {
     return this._def.schema;
   }
@@ -2445,7 +2445,7 @@ class X extends x {
           status: t.value,
           value: o
         })) : g);
-    b.assertNever(n);
+    x.assertNever(n);
   }
 }
 X.create = (a, e, t) => new X({
@@ -2460,7 +2460,7 @@ X.createWithPreprocess = (a, e, t) => new X({
   typeName: f.ZodEffects,
   ...y(t)
 });
-class Z extends x {
+class Z extends b {
   _parse(e) {
     return this._getType(e) === l.undefined ? C(void 0) : this._def.innerType._parse(e);
   }
@@ -2473,7 +2473,7 @@ Z.create = (a, e) => new Z({
   typeName: f.ZodOptional,
   ...y(e)
 });
-class G extends x {
+class G extends b {
   _parse(e) {
     return this._getType(e) === l.null ? C(null) : this._def.innerType._parse(e);
   }
@@ -2486,7 +2486,7 @@ G.create = (a, e) => new G({
   typeName: f.ZodNullable,
   ...y(e)
 });
-class me extends x {
+class me extends b {
   _parse(e) {
     const { ctx: t } = this._processInputParams(e);
     let s = t.data;
@@ -2506,7 +2506,7 @@ me.create = (a, e) => new me({
   defaultValue: typeof e.default == "function" ? e.default : () => e.default,
   ...y(e)
 });
-class ge extends x {
+class ge extends b {
   _parse(e) {
     const { ctx: t } = this._processInputParams(e), s = {
       ...t,
@@ -2549,7 +2549,7 @@ ge.create = (a, e) => new ge({
   catchValue: typeof e.catch == "function" ? e.catch : () => e.catch,
   ...y(e)
 });
-class Oe extends x {
+class Oe extends b {
   _parse(e) {
     if (this._getType(e) !== l.nan) {
       const s = this._getOrReturnCtx(e);
@@ -2566,7 +2566,7 @@ Oe.create = (a) => new Oe({
   typeName: f.ZodNaN,
   ...y(a)
 });
-class mt extends x {
+class mt extends b {
   _parse(e) {
     const { ctx: t } = this._processInputParams(e), s = t.data;
     return this._def.type._parse({
@@ -2579,7 +2579,7 @@ class mt extends x {
     return this._def.type;
   }
 }
-class ve extends x {
+class ve extends b {
   _parse(e) {
     const { status: t, ctx: s } = this._processInputParams(e);
     if (s.common.async)
@@ -2619,7 +2619,7 @@ class ve extends x {
     });
   }
 }
-class ye extends x {
+class ye extends b {
   _parse(e) {
     const t = this._def.innerType._parse(e), s = (n) => (q(n) && (n.value = Object.freeze(n.value)), n);
     return se(t) ? t.then((n) => s(n)) : s(t);
@@ -2646,7 +2646,7 @@ const U = re.create, ze = fe.create, H = F.create;
 oe.create;
 Z.create;
 G.create;
-const xe = H(["GET", "POST", "PUT", "PATCH", "DELETE"]), Le = H(["confirm", "block", "limit", "require", "role"]), gt = H([
+const be = H(["GET", "POST", "PUT", "PATCH", "DELETE"]), Le = H(["confirm", "block", "limit", "require", "role"]), gt = H([
   "eq",
   "neq",
   "gt",
@@ -2681,7 +2681,7 @@ const xe = H(["GET", "POST", "PUT", "PATCH", "DELETE"]), Le = H(["confirm", "blo
   version: P().int().default(1),
   title: m(),
   description: m().optional(),
-  method: xe,
+  method: be,
   path: m(),
   query_params: R(m()).default([]),
   inputs: U(vt).default({}),
@@ -2695,7 +2695,7 @@ const xe = H(["GET", "POST", "PUT", "PATCH", "DELETE"]), Le = H(["confirm", "blo
   status: H(["active", "drifted", "disabled", "at_risk"]).default("active")
 });
 T({
-  method: xe,
+  method: be,
   path: m(),
   query: U(m()).optional(),
   requestBody: I().optional(),
@@ -2703,7 +2703,7 @@ T({
   responseBody: I().optional(),
   ts: P()
 });
-const xt = T({
+const bt = T({
   from_event: P().int(),
   from_path: m(),
   to_event: P().int(),
@@ -2717,15 +2717,15 @@ T({
 T({
   skills: R(Be),
   suggested_policies: R(De).default([]),
-  tracer_edges: R(xt).default([])
+  tracer_edges: R(bt).default([])
 });
-const bt = T({
+const xt = T({
   idx: P().int(),
   skill_name: m(),
   description: m(),
   args: U(I()).default({})
 }), Me = T({
-  steps: R(bt),
+  steps: R(xt),
   summary: m()
 }), _t = T({
   role: H(["system", "user", "assistant", "tool"]),
@@ -2747,7 +2747,7 @@ const wt = T({
   type: ze("tool_call"),
   call_id: m(),
   skill: m(),
-  method: xe.optional(),
+  method: be.optional(),
   path: m().optional(),
   args: U(I()).default({}),
   check: T({
@@ -3659,18 +3659,24 @@ class It {
             </div>
 
             <div>
-              <div class="saydo-label">Tell Narration (Wispr / Voice Mic)</div>
+              <div class="saydo-label" style="display: flex; align-items: center; justify-content: space-between;">
+                <span>Tell Narration</span>
+                <span class="saydo-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.35); font-size: 9px; font-weight: 600;">
+                  🎙️ Powered by Wispr Flow
+                </span>
+              </div>
               <div style="position: relative;">
                 <textarea 
                   class="saydo-textarea" 
                   id="textarea-narration" 
                   rows="3" 
-                  placeholder="Talk aloud while doing the task..."
+                  placeholder="Speak naturally with Wispr Flow while clicking (e.g. 'I am creating Website Revamp with 2 lakh budget...')..."
                 >${this.narrationText}</textarea>
-                <button class="saydo-icon-btn" id="btn-mic-teach" style="position: absolute; right: 8px; bottom: 8px;" title="Dictate voice">
+                <button class="saydo-icon-btn" id="btn-mic-teach" style="position: absolute; right: 8px; bottom: 8px; background: ${this.isListening ? "#ef4444" : "#7c3aed"}; color: white;" title="Dictate with Wispr Flow">
                   ${this.isListening ? "🛑" : "🎙️"}
                 </button>
               </div>
+              ${this.isListening ? '<div style="font-size: 10px; color: #c084fc; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;"><span class="saydo-indicator" style="background: #c084fc; box-shadow: 0 0 8px #c084fc;"></span> Wispr Flow listening... Speak aloud at your normal pace.</div>' : ""}
             </div>
 
             <div>
