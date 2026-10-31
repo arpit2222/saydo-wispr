@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: saydo-api
+    runtime: docker
+    dockerfilePath: apps/api/Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /v1/healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AZURE_OPENAI_ENDPOINT
+        value: https://dehixai.openai.azure.com/
+      - key: AZURE_OPENAI_DEPLOYMENT
+        value: grok-4.6
+      - key: AZURE_OPENAI_API_VERSION
+        value: 2024-08-01-preview
+      - key: AGENT_TOKEN
+        value: saydo_secure_token_secret
