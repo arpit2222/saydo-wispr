@@ -14,7 +14,7 @@ import {
   verifyWriteWithRead,
   ChatMessage 
 } from '../lib/agent/agent.js';
-import { getNebiusClient, NEBIUS_MODELS } from '../lib/nebius.js';
+import { getNebiusClient, NEBIUS_MODELS, hasActiveApiKey } from '../lib/nebius.js';
 import { searchDocs } from '../lib/tavily.js';
 import { evaluate, PolicyEvaluationResult, SkillDefinition, PolicyRule } from '@saydo/shared';
 import { logger } from '../lib/logger.js';
@@ -186,10 +186,9 @@ chatRouter.post('/', async (req: Request, res: Response) => {
     });
   }
 
-  // 6. Execute Next Step with Nemotron Agent Model
+  // 6. Execute Next Step with Agent Model
   const tools = generateDynamicTools(activeSkills);
   const client = getNebiusClient();
-  const apiKey = process.env.NEBIUS_API_KEY;
 
   // System Prompt for Agent
   const systemPrompt = `You are SayDo, an autonomous AI agent enabling web applications via typed skills.
@@ -217,7 +216,7 @@ ${activeSkills.map((s) => `- ${s.name}: ${s.description || s.title} [${s.method}
   let rawToolCall: any = null;
   let rawText: string | null = null;
 
-  if (apiKey && !apiKey.startsWith('dummy') && apiKey !== 'your_nebius_api_key') {
+  if (hasActiveApiKey()) {
     try {
       const completion = await client.chat.completions.create({
         model: NEBIUS_MODELS.agent,

@@ -5,7 +5,7 @@ import {
   TracerEdge,
   PolicyRule,
 } from '@saydo/shared';
-import { getNebiusClient, NEBIUS_MODELS } from './nebius.js';
+import { getNebiusClient, NEBIUS_MODELS, hasActiveApiKey } from './nebius.js';
 import { logger } from './logger.js';
 
 interface CompileOptions {
@@ -24,14 +24,11 @@ export async function compileSkillsWithNemotron({
   skills: Omit<SkillDefinition, 'id' | 'app_id' | 'version' | 'status'>[];
   suggested_policies: PolicyRule[];
 }> {
-  const apiKey = process.env.NEBIUS_API_KEY;
-  const isLiveNebius = apiKey && apiKey !== 'your_nebius_api_key' && !apiKey.startsWith('dummy');
-
-  if (isLiveNebius) {
+  if (hasActiveApiKey()) {
     try {
       return await callNebiusCompiler({ events, narration, tracerEdges, existingSkills });
     } catch (err: any) {
-      logger.warn({ err }, 'Nebius compiler call failed or malformed; falling back to deterministic compiler');
+      logger.warn({ err }, 'AI compiler call failed or malformed; falling back to deterministic compiler');
     }
   }
 

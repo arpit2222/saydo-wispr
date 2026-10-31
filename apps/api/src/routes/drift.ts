@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { getAppByPublicKey, getSkills, updateSkillStatus, mockDb } from '../lib/supabase.js';
 import { extractChangelog } from '../lib/tavily.js';
-import { getNebiusClient, NEBIUS_MODELS } from '../lib/nebius.js';
+import { getNebiusClient, NEBIUS_MODELS, hasActiveApiKey } from '../lib/nebius.js';
 import { logger } from '../lib/logger.js';
 
 export const driftRouter: Router = Router();
@@ -29,9 +29,8 @@ driftRouter.post('/', async (req: Request, res: Response) => {
   // 2. Fetch existing skills for this app
   const skills = await getSkills(app.id);
 
-  // 3. Nemotron FAST analyzes announced changes against skills
+  // 3. AI analyzes announced changes against skills
   const client = getNebiusClient();
-  const apiKey = process.env.NEBIUS_API_KEY;
 
   let affectedMappings: Array<{
     skill_name: string;
@@ -39,7 +38,7 @@ driftRouter.post('/', async (req: Request, res: Response) => {
     quote: string;
   }> = [];
 
-  if (apiKey && !apiKey.startsWith('dummy') && apiKey !== 'your_nebius_api_key') {
+  if (hasActiveApiKey()) {
     try {
       const completion = await client.chat.completions.create({
         model: NEBIUS_MODELS.fast,

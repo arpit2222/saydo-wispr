@@ -240,9 +240,9 @@ Ensure `apps/api/.env` contains your API credentials:
 PORT=4000
 NODE_ENV=development
 ALLOWED_ORIGINS=http://localhost:3000,http://localhost:4000
-NEBIUS_BASE_URL=https://api.studio.nebius.ai/v1
-NEBIUS_API_KEY=your_nebius_token_factory_key
-TAVILY_API_KEY=your_tavily_api_key
+AZURE_OPENAI_API_KEY=your_azure_api_key_here
+AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
+AZURE_OPENAI_DEPLOYMENT=gpt-4o-mini
 AGENT_TOKEN=saydo_mcp_agent_token_secret
 ```
 

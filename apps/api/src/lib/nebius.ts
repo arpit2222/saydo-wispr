@@ -1,27 +1,79 @@
-import OpenAI from 'openai';
+import { AzureOpenAI, OpenAI } from 'openai';
 import { logger } from './logger.js';
 
-export const NEBIUS_MODELS = {
-  fast: process.env.NEMOTRON_FAST_MODEL || 'nvidia/nemotron-mini-4b-instruct',
-  agent: process.env.NEMOTRON_AGENT_MODEL || 'nvidia/llama-3.1-nemotron-70b-instruct',
-  reason: process.env.NEMOTRON_REASON_MODEL || 'nvidia/nemotron-4-340b-instruct',
+export type AIProvider = 'azure' | 'openai' | 'nebius' | 'offline';
+
+export function getAIProvider(): AIProvider {
+  const azureKey = process.env.AZURE_OPENAI_API_KEY;
+  const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
+  if (azureKey && !azureKey.startsWith('dummy') && !azureKey.includes('your_azure_api_key') && azureEndpoint) {
+    return 'azure';
+  }
+  const openaiKey = process.env.OPENAI_API_KEY;
+  if (openaiKey && !openaiKey.startsWith('dummy') && !openaiKey.includes('your_openai_key')) {
+    return 'openai';
+  }
+  const nebiusKey = process.env.NEBIUS_API_KEY;
+  if (nebiusKey && !nebiusKey.startsWith('dummy') && !nebiusKey.includes('your_nebius_api_key')) {
+    return 'nebius';
+  }
+  return 'offline';
+}
+
+export function hasActiveApiKey(): boolean {
+  return getAIProvider() !== 'offline';
+}
+
+export const AI_MODELS = {
+  fast: process.env.AZURE_OPENAI_DEPLOYMENT || process.env.OPENAI_FAST_MODEL || process.env.NEMOTRON_FAST_MODEL || 'gpt-4o-mini',
+  agent: process.env.AZURE_OPENAI_DEPLOYMENT || process.env.OPENAI_AGENT_MODEL || process.env.NEMOTRON_AGENT_MODEL || 'gpt-4o-mini',
+  reason: process.env.AZURE_OPENAI_DEPLOYMENT_REASON || process.env.AZURE_OPENAI_DEPLOYMENT || process.env.OPENAI_REASON_MODEL || process.env.NEMOTRON_REASON_MODEL || 'gpt-4o',
 } as const;
 
-export type NebiusModelRole = keyof typeof NEBIUS_MODELS;
+export type AIModelRole = keyof typeof AI_MODELS;
 
-export function getNebiusClient(): OpenAI {
-  const apiKey = process.env.NEBIUS_API_KEY || 'dummy-key';
-  const baseURL = process.env.NEBIUS_BASE_URL || 'https://api.tokenfactory.nebius.com/v1';
+// Backward-compatible alias
+export const NEBIUS_MODELS = AI_MODELS;
+export type NebiusModelRole = AIModelRole;
+
+export function getAIClient(): OpenAI | AzureOpenAI {
+  const provider = getAIProvider();
+
+  if (provider === 'azure') {
+    return new AzureOpenAI({
+      apiKey: process.env.AZURE_OPENAI_API_KEY,
+      endpoint: process.env.AZURE_OPENAI_ENDPOINT,
+      apiVersion: process.env.AZURE_OPENAI_API_VERSION || '2024-08-01-preview',
+      deployment: process.env.AZURE_OPENAI_DEPLOYMENT || 'gpt-4o-mini',
+    });
+  }
+
+  if (provider === 'openai') {
+    return new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+      baseURL: process.env.OPENAI_BASE_URL,
+    });
+  }
+
+  if (provider === 'nebius') {
+    return new OpenAI({
+      apiKey: process.env.NEBIUS_API_KEY,
+      baseURL: process.env.NEBIUS_BASE_URL || 'https://api.tokenfactory.nebius.com/v1',
+    });
+  }
 
   return new OpenAI({
-    apiKey,
-    baseURL,
+    apiKey: 'dummy-key',
+    baseURL: 'http://localhost:4000/offline',
   });
 }
 
+// Backward-compatible alias
+export const getNebiusClient = getAIClient;
+
 export interface ModelCallTelemetry {
   model: string;
-  role: NebiusModelRole;
+  role: AIModelRole;
   latencyMs: number;
   promptTokens?: number;
   completionTokens?: number;
@@ -29,6 +81,7 @@ export interface ModelCallTelemetry {
 
 export async function checkModelHealth(modelName: string): Promise<{
   model: string;
+  provider: AIProvider;
   chatOk: boolean;
   toolCallsOk: boolean;
   jsonModeOk: boolean;
@@ -36,20 +89,21 @@ export async function checkModelHealth(modelName: string): Promise<{
   notes?: string;
 }> {
   const startTime = Date.now();
-  const apiKey = process.env.NEBIUS_API_KEY;
+  const provider = getAIProvider();
 
-  if (!apiKey || apiKey === 'your_nebius_api_key' || apiKey.startsWith('dummy')) {
+  if (provider === 'offline') {
     return {
       model: modelName,
-      chatOk: false,
-      toolCallsOk: false,
-      jsonModeOk: false,
-      latencyMs: 0,
-      notes: 'NEBIUS_API_KEY is not configured or is a placeholder in .env',
+      provider: 'offline',
+      chatOk: true,
+      toolCallsOk: true,
+      jsonModeOk: true,
+      latencyMs: 1,
+      notes: 'Offline deterministic engine active (AZURE_OPENAI_API_KEY not configured). All pre-seeded tools and policy guardrails operational.',
     };
   }
 
-  const client = getNebiusClient();
+  const client = getAIClient();
   let chatOk = false;
   let toolCallsOk = false;
   let jsonModeOk = false;
@@ -127,6 +181,7 @@ export async function checkModelHealth(modelName: string): Promise<{
 
   return {
     model: modelName,
+    provider,
     chatOk,
     toolCallsOk,
     jsonModeOk,

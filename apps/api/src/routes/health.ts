@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { checkModelHealth, NEBIUS_MODELS } from '../lib/nebius.js';
+import { checkModelHealth, NEBIUS_MODELS, getAIProvider } from '../lib/nebius.js';
 import { getAppByPublicKey, getSkills, saveHealthCheck, getHealthChecks, mockDb } from '../lib/supabase.js';
 import { logger } from '../lib/logger.js';
 
@@ -22,6 +22,7 @@ healthRouter.get('/healthz', (_req: Request, res: Response) => {
 });
 
 healthRouter.get('/models', async (_req: Request, res: Response) => {
+  const provider = getAIProvider();
   const models = [
     { role: 'fast', name: NEBIUS_MODELS.fast },
     { role: 'agent', name: NEBIUS_MODELS.agent },
@@ -39,6 +40,7 @@ healthRouter.get('/models', async (_req: Request, res: Response) => {
   );
 
   res.json({
+    provider,
     timestamp: new Date().toISOString(),
     results,
   });

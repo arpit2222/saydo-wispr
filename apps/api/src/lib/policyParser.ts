@@ -1,5 +1,5 @@
 import { PolicyRule, PolicyRuleSchema, SkillDefinition } from '@saydo/shared';
-import { getNebiusClient, NEBIUS_MODELS } from './nebius.js';
+import { getNebiusClient, NEBIUS_MODELS, hasActiveApiKey } from './nebius.js';
 import { logger } from './logger.js';
 import { z } from 'zod';
 
@@ -43,14 +43,11 @@ export async function parseSpokenPolicyWithNemotron({
   source?: 'voice' | 'docs' | 'compile';
   skills: SkillDefinition[];
 }): Promise<PolicyRule[]> {
-  const apiKey = process.env.NEBIUS_API_KEY;
-  const isLiveNebius = apiKey && apiKey !== 'your_nebius_api_key' && !apiKey.startsWith('dummy');
-
-  if (isLiveNebius) {
+  if (hasActiveApiKey()) {
     try {
       return await callNebiusPolicyParser({ spoken, appId, source, skills });
     } catch (err: any) {
-      logger.warn({ err }, 'Nebius policy parse failed; using deterministic policy rule compiler');
+      logger.warn({ err }, 'AI policy parse failed; using deterministic policy rule compiler');
     }
   }
 

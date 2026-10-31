@@ -1,5 +1,5 @@
 import { SkillDefinition, PolicyRule, evaluate, AgentPlan, PolicyEvaluationResult } from '@saydo/shared';
-import { getNebiusClient, NEBIUS_MODELS } from '../nebius.js';
+import { getNebiusClient, NEBIUS_MODELS, hasActiveApiKey } from '../nebius.js';
 import { logger } from '../logger.js';
 import { z } from 'zod';
 
@@ -183,9 +183,8 @@ export async function planMultiIntent(
   }
 
   const client = getNebiusClient();
-  const apiKey = process.env.NEBIUS_API_KEY;
 
-  if (apiKey && !apiKey.startsWith('dummy') && apiKey !== 'your_nebius_api_key') {
+  if (hasActiveApiKey()) {
     try {
       const response = await client.chat.completions.create({
         model: NEBIUS_MODELS.reason,

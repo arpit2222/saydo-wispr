@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { getAppByPublicKey, getSkills, mockDb } from '../lib/supabase.js';
 import { extractDocsPages } from '../lib/tavily.js';
-import { getNebiusClient, NEBIUS_MODELS } from '../lib/nebius.js';
+import { getNebiusClient, NEBIUS_MODELS, hasActiveApiKey } from '../lib/nebius.js';
 import { logger } from '../lib/logger.js';
 
 export const discoverRouter: Router = Router();
@@ -27,14 +27,13 @@ discoverRouter.post('/', async (req: Request, res: Response) => {
   // 1. Tavily Extract on docs
   const extractedPages = await extractDocsPages(docsUrl);
 
-  // 2. Parse into Skill and Rule suggestions using Nemotron FAST (or resilient structured extractor)
+  // 2. Parse into Skill and Rule suggestions using AI (or resilient structured extractor)
   const client = getNebiusClient();
-  const apiKey = process.env.NEBIUS_API_KEY;
 
   let skill_suggestions: any[] = [];
   let rule_suggestions: any[] = [];
 
-  if (apiKey && !apiKey.startsWith('dummy') && apiKey !== 'your_nebius_api_key') {
+  if (hasActiveApiKey()) {
     try {
       const combinedDocs = extractedPages
         .map((p) => `URL: ${p.url}\nTITLE: ${p.title}\nCONTENT:\n${p.content}\n---`)
