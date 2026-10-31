@@ -76,11 +76,19 @@ class SayDoSDK {
   private autoInit() {
     if (typeof window === 'undefined') return;
 
-    const currentScript = document.currentScript as HTMLScriptElement | null;
-    const publicKey = currentScript?.getAttribute('data-app') || 'pk_demo_dehix';
-    const apiUrl = currentScript?.getAttribute('data-api') || currentScript?.getAttribute('data-api-url') || 'http://localhost:4000';
+    const start = () => {
+      const scriptEl = (document.currentScript || document.querySelector('script[src*="sdk.js"]')) as HTMLScriptElement | null;
+      const publicKey = scriptEl?.getAttribute('data-app') || (window as any).__SAYDO_APP_KEY__ || 'pk_demo_dehix';
+      const apiUrl = scriptEl?.getAttribute('data-api') || scriptEl?.getAttribute('data-api-url') || (window as any).__SAYDO_API_URL__ || 'http://localhost:4000';
 
-    this.init({ publicKey, apiUrl });
+      this.init({ publicKey, apiUrl });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', start);
+    } else {
+      start();
+    }
   }
 
   public init(config: SayDoConfig) {
@@ -299,6 +307,11 @@ class SayDoSDK {
   private mountWidget() {
     if (typeof document === 'undefined') return;
 
+    if (!document.body) {
+      document.addEventListener('DOMContentLoaded', () => this.mountWidget());
+      return;
+    }
+
     let hostDiv = document.getElementById('saydo-root');
     if (!hostDiv) {
       hostDiv = document.createElement('div');
@@ -306,7 +319,9 @@ class SayDoSDK {
       document.body.appendChild(hostDiv);
     }
 
-    this.shadowRoot = hostDiv.attachShadow({ mode: 'open' });
+    if (!this.shadowRoot) {
+      this.shadowRoot = hostDiv.attachShadow({ mode: 'open' });
+    }
   }
 
   // Send message to SayDo Agent (/v1/chat)

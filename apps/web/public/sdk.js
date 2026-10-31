@@ -2864,8 +2864,11 @@ class Lt {
   }
   autoInit() {
     if (typeof window > "u") return;
-    const e = document.currentScript, t = (e == null ? void 0 : e.getAttribute("data-app")) || "pk_demo_dehix", s = (e == null ? void 0 : e.getAttribute("data-api")) || (e == null ? void 0 : e.getAttribute("data-api-url")) || "http://localhost:4000";
-    this.init({ publicKey: t, apiUrl: s });
+    const e = () => {
+      const t = document.currentScript || document.querySelector('script[src*="sdk.js"]'), s = (t == null ? void 0 : t.getAttribute("data-app")) || window.__SAYDO_APP_KEY__ || "pk_demo_dehix", i = (t == null ? void 0 : t.getAttribute("data-api")) || (t == null ? void 0 : t.getAttribute("data-api-url")) || window.__SAYDO_API_URL__ || "http://localhost:4000";
+      this.init({ publicKey: s, apiUrl: i });
+    };
+    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", e) : e();
   }
   init(e) {
     this.config = { ...this.config, ...e }, this.setupInterceptors(), this.initSpeechRecognition(), this.mountWidget(), this.fetchAppStats(), typeof window < "u" && sessionStorage.getItem("saydo_dismiss_judge_banner") === "true" && (this.showJudgeBanner = !1);
@@ -2994,8 +2997,12 @@ class Lt {
   }
   mountWidget() {
     if (typeof document > "u") return;
+    if (!document.body) {
+      document.addEventListener("DOMContentLoaded", () => this.mountWidget());
+      return;
+    }
     let e = document.getElementById("saydo-root");
-    e || (e = document.createElement("div"), e.id = "saydo-root", document.body.appendChild(e)), this.shadowRoot = e.attachShadow({ mode: "open" });
+    e || (e = document.createElement("div"), e.id = "saydo-root", document.body.appendChild(e)), this.shadowRoot || (this.shadowRoot = e.attachShadow({ mode: "open" }));
   }
   // Send message to SayDo Agent (/v1/chat)
   async submitUserPrompt(e) {
