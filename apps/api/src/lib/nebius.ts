@@ -25,9 +25,9 @@ export function hasActiveApiKey(): boolean {
 }
 
 export const AI_MODELS = {
-  fast: process.env.AZURE_OPENAI_DEPLOYMENT || process.env.OPENAI_FAST_MODEL || process.env.NEMOTRON_FAST_MODEL || 'gpt-4o-mini',
-  agent: process.env.AZURE_OPENAI_DEPLOYMENT || process.env.OPENAI_AGENT_MODEL || process.env.NEMOTRON_AGENT_MODEL || 'gpt-4o-mini',
-  reason: process.env.AZURE_OPENAI_DEPLOYMENT_REASON || process.env.AZURE_OPENAI_DEPLOYMENT || process.env.OPENAI_REASON_MODEL || process.env.NEMOTRON_REASON_MODEL || 'gpt-4o',
+  fast: process.env.AZURE_OPENAI_DEPLOYMENT || process.env.OPENAI_FAST_MODEL || process.env.NEMOTRON_FAST_MODEL || 'grok-4.6',
+  agent: process.env.AZURE_OPENAI_DEPLOYMENT || process.env.OPENAI_AGENT_MODEL || process.env.NEMOTRON_AGENT_MODEL || 'grok-4.6',
+  reason: process.env.AZURE_OPENAI_DEPLOYMENT_REASON || process.env.AZURE_OPENAI_DEPLOYMENT || process.env.OPENAI_REASON_MODEL || process.env.NEMOTRON_REASON_MODEL || 'grok-4.6',
 } as const;
 
 export type AIModelRole = keyof typeof AI_MODELS;
@@ -40,11 +40,17 @@ export function getAIClient(): OpenAI | AzureOpenAI {
   const provider = getAIProvider();
 
   if (provider === 'azure') {
+    let endpoint = (process.env.AZURE_OPENAI_ENDPOINT || '').trim();
+    const servicesMatch = endpoint.match(/https:\/\/([a-zA-Z0-9-]+)\.services\.ai\.azure\.com/i);
+    if (servicesMatch) {
+      endpoint = `https://${servicesMatch[1]}.openai.azure.com`;
+    }
+
     return new AzureOpenAI({
       apiKey: process.env.AZURE_OPENAI_API_KEY,
-      endpoint: process.env.AZURE_OPENAI_ENDPOINT,
+      endpoint,
       apiVersion: process.env.AZURE_OPENAI_API_VERSION || '2024-08-01-preview',
-      deployment: process.env.AZURE_OPENAI_DEPLOYMENT || 'gpt-4o-mini',
+      deployment: process.env.AZURE_OPENAI_DEPLOYMENT || 'grok-4.6',
     });
   }
 
