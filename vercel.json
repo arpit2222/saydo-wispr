@@ -3,6 +3,5 @@
   "framework": "nextjs",
   "buildCommand": "pnpm --filter @saydo/shared build && pnpm --filter @saydo/sdk build && pnpm copy:sdk && pnpm --filter @saydo/web build",
   "outputDirectory": "apps/web/.next",
-  "installCommand": "pnpm install",
-  "regions": ["iad1", "sfo1"]
+  "installCommand": "pnpm install"
 }
