@@ -43,6 +43,12 @@ export function Header({ title = 'DEHIX Platform' }: { title?: string }) {
           <span>{resetting ? 'Resetting...' : 'Reset Demo'}</span>
         </button>
 
+        {/* Wispr status pill */}
+        <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-xs text-purple-300 font-semibold">
+          <span>🎙️</span>
+          <span>Wispr Flow Active</span>
+        </div>
+
         {/* SayDo status pill */}
         <a
           href="/studio"

@@ -162,6 +162,27 @@ export default function ProjectsPage() {
             </div>
           )}
 
+          {/* Wispr Hackathon Judge Quick-Guide */}
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/40 via-indigo-950/30 to-slate-900 border border-purple-500/30 text-xs text-slate-300 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-lg">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/40 flex items-center justify-center font-bold text-base shrink-0">
+                🎙️
+              </div>
+              <div>
+                <span className="font-bold text-white text-sm">Wispr Challenge 60-Second Test:</span>
+                <p className="text-slate-400 text-xs">
+                  Click the bottom right <span className="text-purple-300 font-semibold">&ldquo;SayDo Agent&rdquo;</span> button &rarr; click <span className="text-purple-300 font-semibold">&ldquo;● Record Task&rdquo;</span> &rarr; speak aloud with <span className="text-purple-300 font-semibold">Wispr Flow</span> &rarr; create a project &rarr; view the compiled skill in <a href="/studio" className="underline text-emerald-400 font-semibold">Studio</a>!
+                </p>
+              </div>
+            </div>
+            <a
+              href="/studio"
+              className="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-500/40 font-semibold whitespace-nowrap transition-colors shrink-0"
+            >
+              Open Studio &rarr;
+            </a>
+          </div>
+
           {/* Action Header & Summary Stats */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
