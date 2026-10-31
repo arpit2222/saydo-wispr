@@ -12,6 +12,9 @@
     "smoke-test": "node scripts/smoke-test.mjs"
   },
   "devDependencies": {
+    "next": "^14.2.24",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "turbo": "^2.4.4",
     "typescript": "^5.7.3"
   },
