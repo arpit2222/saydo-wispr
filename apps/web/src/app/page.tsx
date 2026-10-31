@@ -79,6 +79,14 @@ export default function Home() {
 
         <div className="flex items-center gap-3 text-xs">
           <Link
+            href="/studio/voice"
+            className="px-3.5 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 font-semibold border border-purple-500/30 transition-all flex items-center gap-1.5"
+          >
+            <Mic className="w-3.5 h-3.5" />
+            <span>Taught by Voice</span>
+          </Link>
+
+          <Link
             href="/studio"
             className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition-all flex items-center gap-1.5"
           >
@@ -124,6 +132,14 @@ export default function Home() {
           >
             <Play className="w-4 h-4 fill-black" />
             <span>Try the DEHIX-lite demo</span>
+          </Link>
+
+          <Link
+            href="/studio/voice"
+            className="px-6 py-3.5 rounded-xl bg-purple-950/40 hover:bg-purple-900/40 text-purple-200 font-semibold text-sm border border-purple-800/60 hover:border-purple-600 transition-all flex items-center gap-2 shadow-lg"
+          >
+            <Mic className="w-4 h-4 text-purple-400" />
+            <span>Taught by Voice Proof</span>
           </Link>
 
           <Link

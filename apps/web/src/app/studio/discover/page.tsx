@@ -22,7 +22,8 @@ import {
   Plug,
   BarChart3,
   RotateCcw,
-  Terminal
+  Terminal,
+  Mic
 } from 'lucide-react';
 
 interface SkillSuggestion {
@@ -200,6 +201,13 @@ export default function DiscoverPage() {
         >
           <ShieldAlert className="w-4 h-4" />
           Spoken Policies & Guardrails
+        </Link>
+        <Link
+          href="/studio/voice"
+          className="px-4 py-3 text-xs font-semibold text-purple-400 hover:text-purple-300 border-b-2 border-transparent transition-all flex items-center gap-2 whitespace-nowrap"
+        >
+          <Mic className="w-4 h-4 text-purple-400" />
+          Taught by Voice
         </Link>
         <Link
           href="/studio/discover"
