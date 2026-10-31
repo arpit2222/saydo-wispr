@@ -45,7 +45,33 @@ export const mockDb = {
       },
     ],
   ]),
-  recordings: new Map<string, any>(),
+  recordings: new Map<string, any>([
+    [
+      'rec-demo-dehix-1',
+      {
+        id: 'rec-demo-dehix-1',
+        app_id: 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b22',
+        title: 'Create Website Revamp Project',
+        events: [
+          {
+            method: 'POST',
+            path: '/api/dehix/projects',
+            status: 201,
+            requestBody: { name: 'Website Revamp', budget: 200000, description: 'Wispr voice-guided delivery' },
+            responseBody: { project_id: 'proj-demo-99', message: 'Project created successfully' },
+            ts: Date.now() - 3600000,
+          },
+        ],
+        narration: 'Create a new Website Revamp project with 2 lakh budget and Wispr voice-guided delivery milestones',
+        narration_metadata: {
+          source: 'voice',
+          words: 16,
+          created_at: new Date(Date.now() - 3600000).toISOString(),
+        },
+        created_at: new Date(Date.now() - 3600000).toISOString(),
+      },
+    ],
+  ]),
   skills: new Map<string, any>([
     [
       '11111111-1111-1111-1111-111111111111',
@@ -68,6 +94,8 @@ export const mockDb = {
         is_write: false,
         verify_with: null,
         status: 'active',
+        narration: 'Retrieve all active talent and grant projects in DEHIX to review deliverables and status',
+        narration_metadata: { source: 'voice', words: 15, created_at: new Date(Date.now() - 86400000).toISOString() },
         created_at: new Date().toISOString(),
       },
     ],
@@ -94,6 +122,8 @@ export const mockDb = {
         is_write: true,
         verify_with: 'get_project',
         status: 'active',
+        narration: 'When spinning up a new project or bounty on DEHIX, capture the project title, grant budget in INR, and key delivery milestones',
+        narration_metadata: { source: 'voice', words: 23, created_at: new Date(Date.now() - 86400000).toISOString() },
         created_at: new Date().toISOString(),
       },
     ],
@@ -118,6 +148,8 @@ export const mockDb = {
         is_write: false,
         verify_with: null,
         status: 'active',
+        narration: 'Look up the specific Web3 project by its UUID to inspect budget and team allocations',
+        narration_metadata: { source: 'voice', words: 15, created_at: new Date(Date.now() - 86400000).toISOString() },
         created_at: new Date().toISOString(),
       },
     ],
@@ -144,6 +176,8 @@ export const mockDb = {
         is_write: true,
         verify_with: null,
         status: 'active',
+        narration: 'Invite a collaborator or mentor by email address, assigning them viewer, editor, or admin roles',
+        narration_metadata: { source: 'voice', words: 15, created_at: new Date(Date.now() - 86400000).toISOString() },
         created_at: new Date().toISOString(),
       },
     ],
@@ -169,6 +203,8 @@ export const mockDb = {
         is_write: false,
         verify_with: null,
         status: 'active',
+        narration: 'Query talent applications submitted for open bounties to see candidate proposals and credentials',
+        narration_metadata: { source: 'voice', words: 14, created_at: new Date(Date.now() - 86400000).toISOString() },
         created_at: new Date().toISOString(),
       },
     ],
@@ -194,6 +230,8 @@ export const mockDb = {
         is_write: true,
         verify_with: null,
         status: 'active',
+        narration: 'Record review decision to approve or reject an applicant submission for a Web3 grant',
+        narration_metadata: { source: 'voice', words: 14, created_at: new Date(Date.now() - 86400000).toISOString() },
         created_at: new Date().toISOString(),
       },
     ],
@@ -278,6 +316,7 @@ export async function saveRecording(data: {
   title: string;
   events: any[];
   narration?: string;
+  narration_metadata?: any;
 }) {
   const sb = getSupabase();
   const id = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `rec-${Date.now()}`;
@@ -287,6 +326,11 @@ export async function saveRecording(data: {
     title: data.title,
     events: data.events,
     narration: data.narration || null,
+    narration_metadata: data.narration_metadata || (data.narration ? {
+      source: 'voice',
+      words: data.narration.trim().split(/\s+/).filter(Boolean).length,
+      created_at: new Date().toISOString(),
+    } : null),
     created_at: new Date().toISOString(),
   };
 

@@ -58,6 +58,14 @@ export const SkillDefinitionSchema = z.object({
   verify_with: z.string().nullable().optional(),
   source_recording: z.string().uuid().nullable().optional(),
   narration: z.string().nullable().optional(),
+  narration_metadata: z
+    .object({
+      source: z.enum(['voice', 'typed']),
+      words: z.number(),
+      created_at: z.string().optional(),
+    })
+    .nullable()
+    .optional(),
   status: z.enum(['active', 'drifted', 'disabled', 'at_risk']).default('active'),
 });
 

@@ -61,6 +61,11 @@ compileRouter.post('/', async (req: Request, res: Response) => {
         version: nextVersion,
         source_recording: recording_id,
         narration: recording.narration,
+        narration_metadata: recording.narration_metadata || (recording.narration ? {
+          source: 'voice',
+          words: recording.narration.trim().split(/\s+/).filter(Boolean).length,
+          created_at: recording.created_at,
+        } : null),
         status: 'active',
       };
 

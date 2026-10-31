@@ -51,7 +51,14 @@ class SayDoSDK {
   private isListening: boolean = false;
   private speechRecognition: any = null;
   private narrationText: string = '';
+  private narrationSource: 'voice' | 'typed' = 'typed';
   private recordingTitle: string = '';
+
+  private getNarrationWordCount(): number {
+    const text = this.narrationText.trim();
+    if (!text) return 0;
+    return text.split(/\s+/).filter(Boolean).length;
+  }
 
   // Ask Agent State
   private chatItems: ChatItem[] = [];
@@ -235,6 +242,7 @@ class SayDoSDK {
         }
 
         if (this.activeTab === 'teach') {
+          this.narrationSource = 'voice';
           this.narrationText = (this.narrationText + ' ' + transcript).trim();
         } else {
           this.chatInputText = (this.chatInputText + ' ' + transcript).trim();
@@ -1048,24 +1056,41 @@ class SayDoSDK {
             </div>
 
             <div>
-              <div class="saydo-label" style="display: flex; align-items: center; justify-content: space-between;">
-                <span>Tell Narration</span>
+              <div class="saydo-label" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-weight: 600; color: #f1f5f9;">Spoken Task Narration</span>
                 <span class="saydo-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.35); font-size: 9px; font-weight: 600;">
-                  🎙️ Powered by Wispr Flow
+                  🎙️ Works with Wispr Flow
                 </span>
               </div>
+
+              <!-- Wispr Flow Hint Chip & Fallback -->
+              <div style="font-size: 11px; color: #c084fc; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; background: rgba(168, 85, 247, 0.1); padding: 6px 10px; border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span>✨</span>
+                  <span style="font-weight: 500;">Hold your Wispr hotkey and talk</span>
+                </div>
+                <button id="btn-mic-teach" style="background: ${this.isListening ? '#ef4444' : 'rgba(255, 255, 255, 0.08)'}; border: 1px solid ${this.isListening ? '#f87171' : 'rgba(255, 255, 255, 0.15)'}; color: ${this.isListening ? '#fff' : '#cbd5e1'}; padding: 2px 7px; border-radius: 6px; font-size: 10px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.15s ease;" title="Browser Web Speech fallback">
+                  <span>${this.isListening ? '🛑 Stop' : '🎙️ Mic fallback'}</span>
+                </button>
+              </div>
+
               <div style="position: relative;">
                 <textarea 
                   class="saydo-textarea" 
                   id="textarea-narration" 
-                  rows="3" 
-                  placeholder="Speak naturally with Wispr Flow while clicking (e.g. 'I am creating Website Revamp with 2 lakh budget...')..."
+                  rows="4" 
+                  style="min-height: 85px; font-size: 12px; line-height: 1.5; resize: vertical;"
+                  placeholder="Hold your Wispr key and explain this task like you'd explain it to a new teammate…"
                 >${this.narrationText}</textarea>
-                <button class="saydo-icon-btn" id="btn-mic-teach" style="position: absolute; right: 8px; bottom: 8px; background: ${this.isListening ? '#ef4444' : '#7c3aed'}; color: white;" title="Dictate with Wispr Flow">
-                  ${this.isListening ? '🛑' : '🎙️'}
-                </button>
               </div>
-              ${this.isListening ? '<div style="font-size: 10px; color: #c084fc; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;"><span class="saydo-indicator" style="background: #c084fc; box-shadow: 0 0 8px #c084fc;"></span> Wispr Flow listening... Speak aloud at your normal pace.</div>' : ''}
+
+              <div id="narration-word-count" style="font-size: 10px; color: #94a3b8; margin-top: 5px; display: flex; align-items: center; justify-content: space-between; padding: 0 2px;">
+                <span>${this.getNarrationWordCount()} words</span>
+                <span style="color: ${this.narrationSource === 'voice' ? '#c084fc' : '#64748b'}; font-weight: 500;">
+                  ${this.narrationSource === 'voice' ? '🎙️ likely dictated' : '⌨️ typed'}
+                </span>
+              </div>
+              ${this.isListening ? '<div style="font-size: 10px; color: #c084fc; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;"><span class="saydo-indicator" style="background: #c084fc; box-shadow: 0 0 8px #c084fc;"></span> Web Speech API active (en-IN)... Speak clearly.</div>' : ''}
             </div>
 
             <div>
@@ -1333,22 +1358,50 @@ class SayDoSDK {
     this.shadowRoot.getElementById('btn-toggle-rec')?.addEventListener('click', () => {
       if (this.isRecording) {
         this.isRecording = false;
+        this.render();
       } else {
         this.isRecording = true;
         this.recordedEvents = [];
+        this.render();
+        // Auto-focus textarea so Wispr Flow dictation lands directly in the box
+        setTimeout(() => {
+          const area = this.shadowRoot?.getElementById('textarea-narration') as HTMLTextAreaElement | null;
+          area?.focus();
+        }, 50);
       }
-      this.render();
     });
 
-    this.shadowRoot.getElementById('btn-mic-teach')?.addEventListener('click', () => this.toggleSpeech());
+    this.shadowRoot.getElementById('btn-mic-teach')?.addEventListener('click', () => {
+      this.narrationSource = 'voice';
+      this.toggleSpeech();
+    });
     this.shadowRoot.getElementById('btn-mic-ask')?.addEventListener('click', () => this.toggleSpeech());
 
     this.shadowRoot.getElementById('input-title')?.addEventListener('input', (e) => {
       this.recordingTitle = (e.target as HTMLInputElement).value;
     });
 
-    this.shadowRoot.getElementById('textarea-narration')?.addEventListener('input', (e) => {
-      this.narrationText = (e.target as HTMLTextAreaElement).value;
+    const narrationArea = this.shadowRoot.getElementById('textarea-narration') as HTMLTextAreaElement | null;
+    narrationArea?.addEventListener('input', (e) => {
+      const prevLen = this.narrationText.length;
+      const nextVal = (e.target as HTMLTextAreaElement).value;
+      const delta = nextVal.length - prevLen;
+      const inputEv = e as InputEvent;
+
+      // Burst heuristic: text arriving in large bursts (>15 chars in one event, paste/Wispr stream) -> 'voice'
+      if (delta > 15 || inputEv.inputType === 'insertFromPaste') {
+        this.narrationSource = 'voice';
+      }
+      this.narrationText = nextVal;
+
+      // Update live word count and source badge dynamically without rerendering
+      const countEl = this.shadowRoot?.getElementById('narration-word-count');
+      if (countEl) {
+        const words = this.getNarrationWordCount();
+        const sourceLabel = this.narrationSource === 'voice' ? '🎙️ likely dictated' : '⌨️ typed';
+        const sourceColor = this.narrationSource === 'voice' ? '#c084fc' : '#64748b';
+        countEl.innerHTML = `<span>${words} words</span><span style="color: ${sourceColor}; font-weight: 500;">${sourceLabel}</span>`;
+      }
     });
 
     this.shadowRoot.getElementById('btn-save-recording')?.addEventListener('click', () => this.saveRecording());
@@ -1407,12 +1460,18 @@ class SayDoSDK {
     const title = this.recordingTitle.trim() || `Recording ${new Date().toLocaleTimeString()}`;
     const narration = this.narrationText.trim();
     const sanitized = sanitizeEvents(this.recordedEvents);
+    const words = narration ? narration.split(/\s+/).filter(Boolean).length : 0;
 
     const payload = {
       publicKey: this.config.publicKey,
       title,
       events: sanitized,
       narration,
+      narration_metadata: {
+        source: this.narrationSource,
+        words,
+        created_at: new Date().toISOString(),
+      },
     };
 
     try {
@@ -1432,6 +1491,7 @@ class SayDoSDK {
       this.recordedEvents = [];
       this.recordingTitle = '';
       this.narrationText = '';
+      this.narrationSource = 'typed';
       this.render();
     } catch (err: any) {
       alert(`❌ Failed to save recording: ${err.message}`);

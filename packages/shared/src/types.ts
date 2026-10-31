@@ -37,6 +37,12 @@ export interface SkillInputParam {
   default?: unknown;
 }
 
+export interface NarrationMetadata {
+  source: 'voice' | 'typed';
+  words: number;
+  created_at?: string;
+}
+
 export interface SkillDefinition {
   id: string;
   app_id: string;
@@ -55,6 +61,7 @@ export interface SkillDefinition {
   verify_with?: string | null;
   source_recording?: string | null;
   narration?: string | null;
+  narration_metadata?: NarrationMetadata | null;
   status: 'active' | 'drifted' | 'disabled' | 'at_risk';
 }
 

@@ -11,6 +11,13 @@ const CreateRecordingSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   events: z.array(NetworkCapturedEventSchema).default([]),
   narration: z.string().optional(),
+  narration_metadata: z
+    .object({
+      source: z.enum(['voice', 'typed']),
+      words: z.number(),
+      created_at: z.string().optional(),
+    })
+    .optional(),
 });
 
 recordingsRouter.post('/', async (req: Request, res: Response) => {
@@ -49,7 +56,7 @@ recordingsRouter.post('/', async (req: Request, res: Response) => {
       return res.status(400).json({ error: parsed.error.errors[0]?.message || 'Invalid recording payload' });
     }
 
-    const { title, events, narration } = parsed.data;
+    const { title, events, narration, narration_metadata } = parsed.data;
 
     // Defense-in-depth: Re-sanitize events on server-side
     const cleanEvents = sanitizeEvents(events as any);
@@ -59,6 +66,7 @@ recordingsRouter.post('/', async (req: Request, res: Response) => {
       title,
       events: cleanEvents,
       narration,
+      narration_metadata,
     });
 
     logger.info({ recordingId: recording.id, eventCount: cleanEvents.length, app: app.name }, 'Recording saved');

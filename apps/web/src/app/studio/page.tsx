@@ -504,10 +504,27 @@ export default function StudioPage() {
                       </div>
                     )}
 
-                    {/* Narration Quote */}
+                    {/* Owner Narration Quote & Voice Badge */}
                     {skill.narration && (
-                      <div className="text-xs text-slate-400 italic bg-slate-900/40 p-2.5 rounded-lg border border-slate-800/60 mt-1">
-                        "{skill.narration}"
+                      <div className="text-xs bg-slate-900/60 p-3 rounded-xl border border-slate-800/80 flex flex-col gap-1.5 mt-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">
+                            Owner Narration
+                          </span>
+                          {skill.narration_metadata?.source === 'voice' || (!skill.narration_metadata && skill.narration) ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30">
+                              🎙️ taught by voice (likely dictated)
+                              {skill.narration_metadata?.words ? ` · ${skill.narration_metadata.words}w` : ''}
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
+                              ⌨️ typed {skill.narration_metadata?.words ? ` · ${skill.narration_metadata.words}w` : ''}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-300 italic leading-relaxed">
+                          &ldquo;{skill.narration}&rdquo;
+                        </p>
                       </div>
                     )}
                   </div>

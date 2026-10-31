@@ -1,52 +1,52 @@
-var Ve = Object.defineProperty;
-var Ue = (a, e, t) => e in a ? Ve(a, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : a[e] = t;
-var w = (a, e, t) => Ue(a, typeof e != "symbol" ? e + "" : e, t);
-var x;
+var He = Object.defineProperty;
+var Ge = (a, e, t) => e in a ? He(a, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : a[e] = t;
+var w = (a, e, t) => Ge(a, typeof e != "symbol" ? e + "" : e, t);
+var b;
 (function(a) {
-  a.assertEqual = (n) => {
+  a.assertEqual = (i) => {
   };
-  function e(n) {
+  function e(i) {
   }
   a.assertIs = e;
-  function t(n) {
+  function t(i) {
     throw new Error();
   }
-  a.assertNever = t, a.arrayToEnum = (n) => {
-    const i = {};
-    for (const r of n)
-      i[r] = r;
-    return i;
-  }, a.getValidEnumValues = (n) => {
-    const i = a.objectKeys(n).filter((o) => typeof n[n[o]] != "number"), r = {};
-    for (const o of i)
-      r[o] = n[o];
+  a.assertNever = t, a.arrayToEnum = (i) => {
+    const n = {};
+    for (const r of i)
+      n[r] = r;
+    return n;
+  }, a.getValidEnumValues = (i) => {
+    const n = a.objectKeys(i).filter((o) => typeof i[i[o]] != "number"), r = {};
+    for (const o of n)
+      r[o] = i[o];
     return a.objectValues(r);
-  }, a.objectValues = (n) => a.objectKeys(n).map(function(i) {
-    return n[i];
-  }), a.objectKeys = typeof Object.keys == "function" ? (n) => Object.keys(n) : (n) => {
-    const i = [];
-    for (const r in n)
-      Object.prototype.hasOwnProperty.call(n, r) && i.push(r);
-    return i;
-  }, a.find = (n, i) => {
-    for (const r of n)
-      if (i(r))
+  }, a.objectValues = (i) => a.objectKeys(i).map(function(n) {
+    return i[n];
+  }), a.objectKeys = typeof Object.keys == "function" ? (i) => Object.keys(i) : (i) => {
+    const n = [];
+    for (const r in i)
+      Object.prototype.hasOwnProperty.call(i, r) && n.push(r);
+    return n;
+  }, a.find = (i, n) => {
+    for (const r of i)
+      if (n(r))
         return r;
-  }, a.isInteger = typeof Number.isInteger == "function" ? (n) => Number.isInteger(n) : (n) => typeof n == "number" && Number.isFinite(n) && Math.floor(n) === n;
-  function s(n, i = " | ") {
-    return n.map((r) => typeof r == "string" ? `'${r}'` : r).join(i);
+  }, a.isInteger = typeof Number.isInteger == "function" ? (i) => Number.isInteger(i) : (i) => typeof i == "number" && Number.isFinite(i) && Math.floor(i) === i;
+  function s(i, n = " | ") {
+    return i.map((r) => typeof r == "string" ? `'${r}'` : r).join(n);
   }
-  a.joinValues = s, a.jsonStringifyReplacer = (n, i) => typeof i == "bigint" ? i.toString() : i;
-})(x || (x = {}));
-var xe;
+  a.joinValues = s, a.jsonStringifyReplacer = (i, n) => typeof n == "bigint" ? n.toString() : n;
+})(b || (b = {}));
+var ke;
 (function(a) {
   a.mergeShapes = (e, t) => ({
     ...e,
     ...t
     // second overwrites first
   });
-})(xe || (xe = {}));
-const l = x.arrayToEnum([
+})(ke || (ke = {}));
+const l = b.arrayToEnum([
   "string",
   "nan",
   "number",
@@ -67,7 +67,7 @@ const l = x.arrayToEnum([
   "never",
   "map",
   "set"
-]), j = (a) => {
+]), P = (a) => {
   switch (typeof a) {
     case "undefined":
       return l.undefined;
@@ -88,7 +88,7 @@ const l = x.arrayToEnum([
     default:
       return l.unknown;
   }
-}, d = x.arrayToEnum([
+}, d = b.arrayToEnum([
   "invalid_type",
   "invalid_literal",
   "custom",
@@ -106,7 +106,7 @@ const l = x.arrayToEnum([
   "not_multiple_of",
   "not_finite"
 ]);
-class N extends Error {
+class Z extends Error {
   get errors() {
     return this.issues;
   }
@@ -120,16 +120,16 @@ class N extends Error {
     Object.setPrototypeOf ? Object.setPrototypeOf(this, t) : this.__proto__ = t, this.name = "ZodError", this.issues = e;
   }
   format(e) {
-    const t = e || function(i) {
-      return i.message;
-    }, s = { _errors: [] }, n = (i) => {
-      for (const r of i.issues)
+    const t = e || function(n) {
+      return n.message;
+    }, s = { _errors: [] }, i = (n) => {
+      for (const r of n.issues)
         if (r.code === "invalid_union")
-          r.unionErrors.map(n);
+          r.unionErrors.map(i);
         else if (r.code === "invalid_return_type")
-          n(r.returnTypeError);
+          i(r.returnTypeError);
         else if (r.code === "invalid_arguments")
-          n(r.argumentsError);
+          i(r.argumentsError);
         else if (r.path.length === 0)
           s._errors.push(t(r));
         else {
@@ -140,36 +140,36 @@ class N extends Error {
           }
         }
     };
-    return n(this), s;
+    return i(this), s;
   }
   static assert(e) {
-    if (!(e instanceof N))
+    if (!(e instanceof Z))
       throw new Error(`Not a ZodError: ${e}`);
   }
   toString() {
     return this.message;
   }
   get message() {
-    return JSON.stringify(this.issues, x.jsonStringifyReplacer, 2);
+    return JSON.stringify(this.issues, b.jsonStringifyReplacer, 2);
   }
   get isEmpty() {
     return this.issues.length === 0;
   }
   flatten(e = (t) => t.message) {
     const t = {}, s = [];
-    for (const n of this.issues)
-      if (n.path.length > 0) {
-        const i = n.path[0];
-        t[i] = t[i] || [], t[i].push(e(n));
+    for (const i of this.issues)
+      if (i.path.length > 0) {
+        const n = i.path[0];
+        t[n] = t[n] || [], t[n].push(e(i));
       } else
-        s.push(e(n));
+        s.push(e(i));
     return { formErrors: s, fieldErrors: t };
   }
   get formErrors() {
     return this.flatten();
   }
 }
-N.create = (a) => new N(a);
+Z.create = (a) => new Z(a);
 const le = (a, e) => {
   let t;
   switch (a.code) {
@@ -177,19 +177,19 @@ const le = (a, e) => {
       a.received === l.undefined ? t = "Required" : t = `Expected ${a.expected}, received ${a.received}`;
       break;
     case d.invalid_literal:
-      t = `Invalid literal value, expected ${JSON.stringify(a.expected, x.jsonStringifyReplacer)}`;
+      t = `Invalid literal value, expected ${JSON.stringify(a.expected, b.jsonStringifyReplacer)}`;
       break;
     case d.unrecognized_keys:
-      t = `Unrecognized key(s) in object: ${x.joinValues(a.keys, ", ")}`;
+      t = `Unrecognized key(s) in object: ${b.joinValues(a.keys, ", ")}`;
       break;
     case d.invalid_union:
       t = "Invalid input";
       break;
     case d.invalid_union_discriminator:
-      t = `Invalid discriminator value. Expected ${x.joinValues(a.options)}`;
+      t = `Invalid discriminator value. Expected ${b.joinValues(a.options)}`;
       break;
     case d.invalid_enum_value:
-      t = `Invalid enum value. Expected ${x.joinValues(a.options)}, received '${a.received}'`;
+      t = `Invalid enum value. Expected ${b.joinValues(a.options)}, received '${a.received}'`;
       break;
     case d.invalid_arguments:
       t = "Invalid function arguments";
@@ -201,7 +201,7 @@ const le = (a, e) => {
       t = "Invalid date";
       break;
     case d.invalid_string:
-      typeof a.validation == "object" ? "includes" in a.validation ? (t = `Invalid input: must include "${a.validation.includes}"`, typeof a.validation.position == "number" && (t = `${t} at one or more positions greater than or equal to ${a.validation.position}`)) : "startsWith" in a.validation ? t = `Invalid input: must start with "${a.validation.startsWith}"` : "endsWith" in a.validation ? t = `Invalid input: must end with "${a.validation.endsWith}"` : x.assertNever(a.validation) : a.validation !== "regex" ? t = `Invalid ${a.validation}` : t = "Invalid";
+      typeof a.validation == "object" ? "includes" in a.validation ? (t = `Invalid input: must include "${a.validation.includes}"`, typeof a.validation.position == "number" && (t = `${t} at one or more positions greater than or equal to ${a.validation.position}`)) : "startsWith" in a.validation ? t = `Invalid input: must start with "${a.validation.startsWith}"` : "endsWith" in a.validation ? t = `Invalid input: must end with "${a.validation.endsWith}"` : b.assertNever(a.validation) : a.validation !== "regex" ? t = `Invalid ${a.validation}` : t = "Invalid";
       break;
     case d.too_small:
       a.type === "array" ? t = `Array must contain ${a.exact ? "exactly" : a.inclusive ? "at least" : "more than"} ${a.minimum} element(s)` : a.type === "string" ? t = `String must contain ${a.exact ? "exactly" : a.inclusive ? "at least" : "over"} ${a.minimum} character(s)` : a.type === "number" ? t = `Number must be ${a.exact ? "exactly equal to " : a.inclusive ? "greater than or equal to " : "greater than "}${a.minimum}` : a.type === "bigint" ? t = `Number must be ${a.exact ? "exactly equal to " : a.inclusive ? "greater than or equal to " : "greater than "}${a.minimum}` : a.type === "date" ? t = `Date must be ${a.exact ? "exactly equal to " : a.inclusive ? "greater than or equal to " : "greater than "}${new Date(Number(a.minimum))}` : t = "Invalid input";
@@ -222,37 +222,37 @@ const le = (a, e) => {
       t = "Number must be finite";
       break;
     default:
-      t = e.defaultError, x.assertNever(a);
+      t = e.defaultError, b.assertNever(a);
   }
   return { message: t };
 };
-let qe = le;
-function We() {
-  return qe;
+let Je = le;
+function Ke() {
+  return Je;
 }
-const Fe = (a) => {
-  const { data: e, path: t, errorMaps: s, issueData: n } = a, i = [...t, ...n.path || []], r = {
-    ...n,
-    path: i
+const Ye = (a) => {
+  const { data: e, path: t, errorMaps: s, issueData: i } = a, n = [...t, ...i.path || []], r = {
+    ...i,
+    path: n
   };
-  if (n.message !== void 0)
+  if (i.message !== void 0)
     return {
-      ...n,
-      path: i,
-      message: n.message
+      ...i,
+      path: n,
+      message: i.message
     };
   let o = "";
   const u = s.filter((h) => !!h).slice().reverse();
   for (const h of u)
     o = h(r, { data: e, defaultError: o }).message;
   return {
-    ...n,
-    path: i,
+    ...i,
+    path: n,
     message: o
   };
 };
 function c(a, e) {
-  const t = We(), s = Fe({
+  const t = Ke(), s = Ye({
     issueData: e,
     data: a.data,
     path: a.path,
@@ -265,7 +265,7 @@ function c(a, e) {
       // then global override map
       t === le ? void 0 : le
       // then global default map
-    ].filter((n) => !!n)
+    ].filter((i) => !!i)
   });
   a.common.issues.push(s);
 }
@@ -281,19 +281,19 @@ class S {
   }
   static mergeArray(e, t) {
     const s = [];
-    for (const n of t) {
-      if (n.status === "aborted")
-        return g;
-      n.status === "dirty" && e.dirty(), s.push(n.value);
+    for (const i of t) {
+      if (i.status === "aborted")
+        return m;
+      i.status === "dirty" && e.dirty(), s.push(i.value);
     }
     return { status: e.value, value: s };
   }
   static async mergeObjectAsync(e, t) {
     const s = [];
-    for (const n of t) {
-      const i = await n.key, r = await n.value;
+    for (const i of t) {
+      const n = await i.key, r = await i.value;
       s.push({
-        key: i,
+        key: n,
         value: r
       });
     }
@@ -301,32 +301,32 @@ class S {
   }
   static mergeObjectSync(e, t) {
     const s = {};
-    for (const n of t) {
-      const { key: i, value: r } = n;
-      if (i.status === "aborted" || r.status === "aborted")
-        return g;
-      i.status === "dirty" && e.dirty(), r.status === "dirty" && e.dirty(), i.value !== "__proto__" && (typeof r.value < "u" || n.alwaysSet) && (s[i.value] = r.value);
+    for (const i of t) {
+      const { key: n, value: r } = i;
+      if (n.status === "aborted" || r.status === "aborted")
+        return m;
+      n.status === "dirty" && e.dirty(), r.status === "dirty" && e.dirty(), n.value !== "__proto__" && (typeof r.value < "u" || i.alwaysSet) && (s[n.value] = r.value);
     }
     return { status: e.value, value: s };
   }
 }
-const g = Object.freeze({
+const m = Object.freeze({
   status: "aborted"
-}), K = (a) => ({ status: "dirty", value: a }), C = (a) => ({ status: "valid", value: a }), _e = (a) => a.status === "aborted", ke = (a) => a.status === "dirty", q = (a) => a.status === "valid", se = (a) => typeof Promise < "u" && a instanceof Promise;
+}), Y = (a) => ({ status: "dirty", value: a }), R = (a) => ({ status: "valid", value: a }), we = (a) => a.status === "aborted", Te = (a) => a.status === "dirty", F = (a) => a.status === "valid", ae = (a) => typeof Promise < "u" && a instanceof Promise;
 var p;
 (function(a) {
   a.errToObj = (e) => typeof e == "string" ? { message: e } : e || {}, a.toString = (e) => typeof e == "string" ? e : e == null ? void 0 : e.message;
 })(p || (p = {}));
-class $ {
-  constructor(e, t, s, n) {
-    this._cachedPath = [], this.parent = e, this.data = t, this._path = s, this._key = n;
+class I {
+  constructor(e, t, s, i) {
+    this._cachedPath = [], this.parent = e, this.data = t, this._path = s, this._key = i;
   }
   get path() {
     return this._cachedPath.length || (Array.isArray(this._key) ? this._cachedPath.push(...this._path, ...this._key) : this._cachedPath.push(...this._path, this._key)), this._cachedPath;
   }
 }
-const we = (a, e) => {
-  if (q(e))
+const Se = (a, e) => {
+  if (F(e))
     return { success: !0, data: e.value };
   if (!a.common.issues.length)
     throw new Error("Validation failed but no issues detected.");
@@ -335,7 +335,7 @@ const we = (a, e) => {
     get error() {
       if (this._error)
         return this._error;
-      const t = new N(a.common.issues);
+      const t = new Z(a.common.issues);
       return this._error = t, this._error;
     }
   };
@@ -343,26 +343,26 @@ const we = (a, e) => {
 function y(a) {
   if (!a)
     return {};
-  const { errorMap: e, invalid_type_error: t, required_error: s, description: n } = a;
+  const { errorMap: e, invalid_type_error: t, required_error: s, description: i } = a;
   if (e && (t || s))
     throw new Error(`Can't use "invalid_type_error" or "required_error" in conjunction with custom error map.`);
-  return e ? { errorMap: e, description: n } : { errorMap: (r, o) => {
+  return e ? { errorMap: e, description: i } : { errorMap: (r, o) => {
     const { message: u } = a;
     return r.code === "invalid_enum_value" ? { message: u ?? o.defaultError } : typeof o.data > "u" ? { message: u ?? s ?? o.defaultError } : r.code !== "invalid_type" ? { message: o.defaultError } : { message: u ?? t ?? o.defaultError };
-  }, description: n };
+  }, description: i };
 }
-class b {
+class x {
   get description() {
     return this._def.description;
   }
   _getType(e) {
-    return j(e.data);
+    return P(e.data);
   }
   _getOrReturnCtx(e, t) {
     return t || {
       common: e.parent.common,
       data: e.data,
-      parsedType: j(e.data),
+      parsedType: P(e.data),
       schemaErrorMap: this._def.errorMap,
       path: e.path,
       parent: e.parent
@@ -374,7 +374,7 @@ class b {
       ctx: {
         common: e.parent.common,
         data: e.data,
-        parsedType: j(e.data),
+        parsedType: P(e.data),
         schemaErrorMap: this._def.errorMap,
         path: e.path,
         parent: e.parent
@@ -383,7 +383,7 @@ class b {
   }
   _parseSync(e) {
     const t = this._parse(e);
-    if (se(t))
+    if (ae(t))
       throw new Error("Synchronous parse encountered promise.");
     return t;
   }
@@ -408,12 +408,12 @@ class b {
       schemaErrorMap: this._def.errorMap,
       parent: null,
       data: e,
-      parsedType: j(e)
-    }, n = this._parseSync({ data: e, path: s.path, parent: s });
-    return we(s, n);
+      parsedType: P(e)
+    }, i = this._parseSync({ data: e, path: s.path, parent: s });
+    return Se(s, i);
   }
   "~validate"(e) {
-    var s, n;
+    var s, i;
     const t = {
       common: {
         issues: [],
@@ -423,24 +423,24 @@ class b {
       schemaErrorMap: this._def.errorMap,
       parent: null,
       data: e,
-      parsedType: j(e)
+      parsedType: P(e)
     };
     if (!this["~standard"].async)
       try {
-        const i = this._parseSync({ data: e, path: [], parent: t });
-        return q(i) ? {
-          value: i.value
+        const n = this._parseSync({ data: e, path: [], parent: t });
+        return F(n) ? {
+          value: n.value
         } : {
           issues: t.common.issues
         };
-      } catch (i) {
-        (n = (s = i == null ? void 0 : i.message) == null ? void 0 : s.toLowerCase()) != null && n.includes("encountered") && (this["~standard"].async = !0), t.common = {
+      } catch (n) {
+        (i = (s = n == null ? void 0 : n.message) == null ? void 0 : s.toLowerCase()) != null && i.includes("encountered") && (this["~standard"].async = !0), t.common = {
           issues: [],
           async: !0
         };
       }
-    return this._parseAsync({ data: e, path: [], parent: t }).then((i) => q(i) ? {
-      value: i.value
+    return this._parseAsync({ data: e, path: [], parent: t }).then((n) => F(n) ? {
+      value: n.value
     } : {
       issues: t.common.issues
     });
@@ -462,27 +462,27 @@ class b {
       schemaErrorMap: this._def.errorMap,
       parent: null,
       data: e,
-      parsedType: j(e)
-    }, n = this._parse({ data: e, path: s.path, parent: s }), i = await (se(n) ? n : Promise.resolve(n));
-    return we(s, i);
+      parsedType: P(e)
+    }, i = this._parse({ data: e, path: s.path, parent: s }), n = await (ae(i) ? i : Promise.resolve(i));
+    return Se(s, n);
   }
   refine(e, t) {
-    const s = (n) => typeof t == "string" || typeof t > "u" ? { message: t } : typeof t == "function" ? t(n) : t;
-    return this._refinement((n, i) => {
-      const r = e(n), o = () => i.addIssue({
+    const s = (i) => typeof t == "string" || typeof t > "u" ? { message: t } : typeof t == "function" ? t(i) : t;
+    return this._refinement((i, n) => {
+      const r = e(i), o = () => n.addIssue({
         code: d.custom,
-        ...s(n)
+        ...s(i)
       });
       return typeof Promise < "u" && r instanceof Promise ? r.then((u) => u ? !0 : (o(), !1)) : r ? !0 : (o(), !1);
     });
   }
   refinement(e, t) {
-    return this._refinement((s, n) => e(s) ? !0 : (n.addIssue(typeof t == "function" ? t(s, n) : t), !1));
+    return this._refinement((s, i) => e(s) ? !0 : (i.addIssue(typeof t == "function" ? t(s, i) : t), !1));
   }
   _refinement(e) {
-    return new X({
+    return new G({
       schema: this,
-      typeName: f.ZodEffects,
+      typeName: g.ZodEffects,
       effect: { type: "refinement", refinement: e }
     });
   }
@@ -497,57 +497,57 @@ class b {
     };
   }
   optional() {
-    return Z.create(this, this._def);
+    return L.create(this, this._def);
   }
   nullable() {
-    return G.create(this, this._def);
+    return J.create(this, this._def);
   }
   nullish() {
     return this.nullable().optional();
   }
   array() {
-    return A.create(this);
+    return $.create(this);
   }
   promise() {
-    return oe.create(this, this._def);
+    return de.create(this, this._def);
   }
   or(e) {
     return ie.create([this, e], this._def);
   }
   and(e) {
-    return ne.create(this, e, this._def);
+    return re.create(this, e, this._def);
   }
   transform(e) {
-    return new X({
+    return new G({
       ...y(this._def),
       schema: this,
-      typeName: f.ZodEffects,
+      typeName: g.ZodEffects,
       effect: { type: "transform", transform: e }
     });
   }
   default(e) {
     const t = typeof e == "function" ? e : () => e;
-    return new me({
+    return new ge({
       ...y(this._def),
       innerType: this,
       defaultValue: t,
-      typeName: f.ZodDefault
+      typeName: g.ZodDefault
     });
   }
   brand() {
-    return new mt({
-      typeName: f.ZodBranded,
+    return new _t({
+      typeName: g.ZodBranded,
       type: this,
       ...y(this._def)
     });
   }
   catch(e) {
     const t = typeof e == "function" ? e : () => e;
-    return new ge({
+    return new me({
       ...y(this._def),
       innerType: this,
       catchValue: t,
-      typeName: f.ZodCatch
+      typeName: g.ZodCatch
     });
   }
   describe(e) {
@@ -570,206 +570,206 @@ class b {
     return this.safeParse(null).success;
   }
 }
-const Xe = /^c[^\s-]{8,}$/i, Ge = /^[0-9a-z]+$/, He = /^[0-9A-HJKMNP-TV-Z]{26}$/i, Je = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/i, Ke = /^[a-z0-9_-]{21}$/i, Ye = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]*$/, Qe = /^[-+]?P(?!$)(?:(?:[-+]?\d+Y)|(?:[-+]?\d+[.,]\d+Y$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:(?:[-+]?\d+W)|(?:[-+]?\d+[.,]\d+W$))?(?:(?:[-+]?\d+D)|(?:[-+]?\d+[.,]\d+D$))?(?:T(?=[\d+-])(?:(?:[-+]?\d+H)|(?:[-+]?\d+[.,]\d+H$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:[-+]?\d+(?:[.,]\d+)?S)?)??$/, et = /^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-\.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9\-]*\.)+[A-Z]{2,}$/i, tt = "^(\\p{Extended_Pictographic}|\\p{Emoji_Component})+$";
+const Qe = /^c[^\s-]{8,}$/i, et = /^[0-9a-z]+$/, tt = /^[0-9A-HJKMNP-TV-Z]{26}$/i, st = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/i, at = /^[a-z0-9_-]{21}$/i, nt = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]*$/, it = /^[-+]?P(?!$)(?:(?:[-+]?\d+Y)|(?:[-+]?\d+[.,]\d+Y$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:(?:[-+]?\d+W)|(?:[-+]?\d+[.,]\d+W$))?(?:(?:[-+]?\d+D)|(?:[-+]?\d+[.,]\d+D$))?(?:T(?=[\d+-])(?:(?:[-+]?\d+H)|(?:[-+]?\d+[.,]\d+H$))?(?:(?:[-+]?\d+M)|(?:[-+]?\d+[.,]\d+M$))?(?:[-+]?\d+(?:[.,]\d+)?S)?)??$/, rt = /^(?!\.)(?!.*\.\.)([A-Z0-9_'+\-\.]*)[A-Z0-9_+-]@([A-Z0-9][A-Z0-9\-]*\.)+[A-Z]{2,}$/i, ot = "^(\\p{Extended_Pictographic}|\\p{Emoji_Component})+$";
 let ce;
-const st = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/, at = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/(3[0-2]|[12]?[0-9])$/, it = /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/, nt = /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))\/(12[0-8]|1[01][0-9]|[1-9]?[0-9])$/, rt = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/, ot = /^([0-9a-zA-Z-_]{4})*(([0-9a-zA-Z-_]{2}(==)?)|([0-9a-zA-Z-_]{3}(=)?))?$/, Ne = "((\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-((0[13578]|1[02])-(0[1-9]|[12]\\d|3[01])|(0[469]|11)-(0[1-9]|[12]\\d|30)|(02)-(0[1-9]|1\\d|2[0-8])))", dt = new RegExp(`^${Ne}$`);
-function je(a) {
+const dt = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$/, ct = /^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\/(3[0-2]|[12]?[0-9])$/, lt = /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/, ut = /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))\/(12[0-8]|1[01][0-9]|[1-9]?[0-9])$/, ht = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/, pt = /^([0-9a-zA-Z-_]{4})*(([0-9a-zA-Z-_]{2}(==)?)|([0-9a-zA-Z-_]{3}(=)?))?$/, Ze = "((\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-((0[13578]|1[02])-(0[1-9]|[12]\\d|3[01])|(0[469]|11)-(0[1-9]|[12]\\d|30)|(02)-(0[1-9]|1\\d|2[0-8])))", ft = new RegExp(`^${Ze}$`);
+function ze(a) {
   let e = "[0-5]\\d";
   a.precision ? e = `${e}\\.\\d{${a.precision}}` : a.precision == null && (e = `${e}(\\.\\d+)?`);
   const t = a.precision ? "+" : "?";
   return `([01]\\d|2[0-3]):[0-5]\\d(:${e})${t}`;
 }
-function ct(a) {
-  return new RegExp(`^${je(a)}$`);
+function gt(a) {
+  return new RegExp(`^${ze(a)}$`);
 }
-function lt(a) {
-  let e = `${Ne}T${je(a)}`;
+function mt(a) {
+  let e = `${Ze}T${ze(a)}`;
   const t = [];
   return t.push(a.local ? "Z?" : "Z"), a.offset && t.push("([+-]\\d{2}:?\\d{2})"), e = `${e}(${t.join("|")})`, new RegExp(`^${e}$`);
 }
-function ut(a, e) {
-  return !!((e === "v4" || !e) && st.test(a) || (e === "v6" || !e) && it.test(a));
+function yt(a, e) {
+  return !!((e === "v4" || !e) && dt.test(a) || (e === "v6" || !e) && lt.test(a));
 }
-function ht(a, e) {
-  if (!Ye.test(a))
+function vt(a, e) {
+  if (!nt.test(a))
     return !1;
   try {
     const [t] = a.split(".");
     if (!t)
       return !1;
-    const s = t.replace(/-/g, "+").replace(/_/g, "/").padEnd(t.length + (4 - t.length % 4) % 4, "="), n = JSON.parse(atob(s));
-    return !(typeof n != "object" || n === null || "typ" in n && (n == null ? void 0 : n.typ) !== "JWT" || !n.alg || e && n.alg !== e);
+    const s = t.replace(/-/g, "+").replace(/_/g, "/").padEnd(t.length + (4 - t.length % 4) % 4, "="), i = JSON.parse(atob(s));
+    return !(typeof i != "object" || i === null || "typ" in i && (i == null ? void 0 : i.typ) !== "JWT" || !i.alg || e && i.alg !== e);
   } catch {
     return !1;
   }
 }
-function pt(a, e) {
-  return !!((e === "v4" || !e) && at.test(a) || (e === "v6" || !e) && nt.test(a));
+function xt(a, e) {
+  return !!((e === "v4" || !e) && ct.test(a) || (e === "v6" || !e) && ut.test(a));
 }
-class O extends b {
+class N extends x {
   _parse(e) {
     if (this._def.coerce && (e.data = String(e.data)), this._getType(e) !== l.string) {
-      const i = this._getOrReturnCtx(e);
-      return c(i, {
+      const n = this._getOrReturnCtx(e);
+      return c(n, {
         code: d.invalid_type,
         expected: l.string,
-        received: i.parsedType
-      }), g;
+        received: n.parsedType
+      }), m;
     }
     const s = new S();
-    let n;
-    for (const i of this._def.checks)
-      if (i.kind === "min")
-        e.data.length < i.value && (n = this._getOrReturnCtx(e, n), c(n, {
+    let i;
+    for (const n of this._def.checks)
+      if (n.kind === "min")
+        e.data.length < n.value && (i = this._getOrReturnCtx(e, i), c(i, {
           code: d.too_small,
-          minimum: i.value,
+          minimum: n.value,
           type: "string",
           inclusive: !0,
           exact: !1,
-          message: i.message
+          message: n.message
         }), s.dirty());
-      else if (i.kind === "max")
-        e.data.length > i.value && (n = this._getOrReturnCtx(e, n), c(n, {
+      else if (n.kind === "max")
+        e.data.length > n.value && (i = this._getOrReturnCtx(e, i), c(i, {
           code: d.too_big,
-          maximum: i.value,
+          maximum: n.value,
           type: "string",
           inclusive: !0,
           exact: !1,
-          message: i.message
+          message: n.message
         }), s.dirty());
-      else if (i.kind === "length") {
-        const r = e.data.length > i.value, o = e.data.length < i.value;
-        (r || o) && (n = this._getOrReturnCtx(e, n), r ? c(n, {
+      else if (n.kind === "length") {
+        const r = e.data.length > n.value, o = e.data.length < n.value;
+        (r || o) && (i = this._getOrReturnCtx(e, i), r ? c(i, {
           code: d.too_big,
-          maximum: i.value,
+          maximum: n.value,
           type: "string",
           inclusive: !0,
           exact: !0,
-          message: i.message
-        }) : o && c(n, {
+          message: n.message
+        }) : o && c(i, {
           code: d.too_small,
-          minimum: i.value,
+          minimum: n.value,
           type: "string",
           inclusive: !0,
           exact: !0,
-          message: i.message
+          message: n.message
         }), s.dirty());
-      } else if (i.kind === "email")
-        et.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+      } else if (n.kind === "email")
+        rt.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
           validation: "email",
           code: d.invalid_string,
-          message: i.message
+          message: n.message
         }), s.dirty());
-      else if (i.kind === "emoji")
-        ce || (ce = new RegExp(tt, "u")), ce.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+      else if (n.kind === "emoji")
+        ce || (ce = new RegExp(ot, "u")), ce.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
           validation: "emoji",
           code: d.invalid_string,
-          message: i.message
+          message: n.message
         }), s.dirty());
-      else if (i.kind === "uuid")
-        Je.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+      else if (n.kind === "uuid")
+        st.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
           validation: "uuid",
           code: d.invalid_string,
-          message: i.message
+          message: n.message
         }), s.dirty());
-      else if (i.kind === "nanoid")
-        Ke.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+      else if (n.kind === "nanoid")
+        at.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
           validation: "nanoid",
           code: d.invalid_string,
-          message: i.message
+          message: n.message
         }), s.dirty());
-      else if (i.kind === "cuid")
-        Xe.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+      else if (n.kind === "cuid")
+        Qe.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
           validation: "cuid",
           code: d.invalid_string,
-          message: i.message
+          message: n.message
         }), s.dirty());
-      else if (i.kind === "cuid2")
-        Ge.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+      else if (n.kind === "cuid2")
+        et.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
           validation: "cuid2",
           code: d.invalid_string,
-          message: i.message
+          message: n.message
         }), s.dirty());
-      else if (i.kind === "ulid")
-        He.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+      else if (n.kind === "ulid")
+        tt.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
           validation: "ulid",
           code: d.invalid_string,
-          message: i.message
+          message: n.message
         }), s.dirty());
-      else if (i.kind === "url")
+      else if (n.kind === "url")
         try {
           new URL(e.data);
         } catch {
-          n = this._getOrReturnCtx(e, n), c(n, {
+          i = this._getOrReturnCtx(e, i), c(i, {
             validation: "url",
             code: d.invalid_string,
-            message: i.message
+            message: n.message
           }), s.dirty();
         }
-      else i.kind === "regex" ? (i.regex.lastIndex = 0, i.regex.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+      else n.kind === "regex" ? (n.regex.lastIndex = 0, n.regex.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
         validation: "regex",
         code: d.invalid_string,
-        message: i.message
-      }), s.dirty())) : i.kind === "trim" ? e.data = e.data.trim() : i.kind === "includes" ? e.data.includes(i.value, i.position) || (n = this._getOrReturnCtx(e, n), c(n, {
+        message: n.message
+      }), s.dirty())) : n.kind === "trim" ? e.data = e.data.trim() : n.kind === "includes" ? e.data.includes(n.value, n.position) || (i = this._getOrReturnCtx(e, i), c(i, {
         code: d.invalid_string,
-        validation: { includes: i.value, position: i.position },
-        message: i.message
-      }), s.dirty()) : i.kind === "toLowerCase" ? e.data = e.data.toLowerCase() : i.kind === "toUpperCase" ? e.data = e.data.toUpperCase() : i.kind === "startsWith" ? e.data.startsWith(i.value) || (n = this._getOrReturnCtx(e, n), c(n, {
+        validation: { includes: n.value, position: n.position },
+        message: n.message
+      }), s.dirty()) : n.kind === "toLowerCase" ? e.data = e.data.toLowerCase() : n.kind === "toUpperCase" ? e.data = e.data.toUpperCase() : n.kind === "startsWith" ? e.data.startsWith(n.value) || (i = this._getOrReturnCtx(e, i), c(i, {
         code: d.invalid_string,
-        validation: { startsWith: i.value },
-        message: i.message
-      }), s.dirty()) : i.kind === "endsWith" ? e.data.endsWith(i.value) || (n = this._getOrReturnCtx(e, n), c(n, {
+        validation: { startsWith: n.value },
+        message: n.message
+      }), s.dirty()) : n.kind === "endsWith" ? e.data.endsWith(n.value) || (i = this._getOrReturnCtx(e, i), c(i, {
         code: d.invalid_string,
-        validation: { endsWith: i.value },
-        message: i.message
-      }), s.dirty()) : i.kind === "datetime" ? lt(i).test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+        validation: { endsWith: n.value },
+        message: n.message
+      }), s.dirty()) : n.kind === "datetime" ? mt(n).test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
         code: d.invalid_string,
         validation: "datetime",
-        message: i.message
-      }), s.dirty()) : i.kind === "date" ? dt.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+        message: n.message
+      }), s.dirty()) : n.kind === "date" ? ft.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
         code: d.invalid_string,
         validation: "date",
-        message: i.message
-      }), s.dirty()) : i.kind === "time" ? ct(i).test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+        message: n.message
+      }), s.dirty()) : n.kind === "time" ? gt(n).test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
         code: d.invalid_string,
         validation: "time",
-        message: i.message
-      }), s.dirty()) : i.kind === "duration" ? Qe.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+        message: n.message
+      }), s.dirty()) : n.kind === "duration" ? it.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
         validation: "duration",
         code: d.invalid_string,
-        message: i.message
-      }), s.dirty()) : i.kind === "ip" ? ut(e.data, i.version) || (n = this._getOrReturnCtx(e, n), c(n, {
+        message: n.message
+      }), s.dirty()) : n.kind === "ip" ? yt(e.data, n.version) || (i = this._getOrReturnCtx(e, i), c(i, {
         validation: "ip",
         code: d.invalid_string,
-        message: i.message
-      }), s.dirty()) : i.kind === "jwt" ? ht(e.data, i.alg) || (n = this._getOrReturnCtx(e, n), c(n, {
+        message: n.message
+      }), s.dirty()) : n.kind === "jwt" ? vt(e.data, n.alg) || (i = this._getOrReturnCtx(e, i), c(i, {
         validation: "jwt",
         code: d.invalid_string,
-        message: i.message
-      }), s.dirty()) : i.kind === "cidr" ? pt(e.data, i.version) || (n = this._getOrReturnCtx(e, n), c(n, {
+        message: n.message
+      }), s.dirty()) : n.kind === "cidr" ? xt(e.data, n.version) || (i = this._getOrReturnCtx(e, i), c(i, {
         validation: "cidr",
         code: d.invalid_string,
-        message: i.message
-      }), s.dirty()) : i.kind === "base64" ? rt.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+        message: n.message
+      }), s.dirty()) : n.kind === "base64" ? ht.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
         validation: "base64",
         code: d.invalid_string,
-        message: i.message
-      }), s.dirty()) : i.kind === "base64url" ? ot.test(e.data) || (n = this._getOrReturnCtx(e, n), c(n, {
+        message: n.message
+      }), s.dirty()) : n.kind === "base64url" ? pt.test(e.data) || (i = this._getOrReturnCtx(e, i), c(i, {
         validation: "base64url",
         code: d.invalid_string,
-        message: i.message
-      }), s.dirty()) : x.assertNever(i);
+        message: n.message
+      }), s.dirty()) : b.assertNever(n);
     return { status: s.value, value: e.data };
   }
   _regex(e, t, s) {
-    return this.refinement((n) => e.test(n), {
+    return this.refinement((i) => e.test(i), {
       validation: t,
       code: d.invalid_string,
       ...p.errToObj(s)
     });
   }
   _addCheck(e) {
-    return new O({
+    return new N({
       ...this._def,
       checks: [...this._def.checks, e]
     });
@@ -905,19 +905,19 @@ class O extends b {
     return this.min(1, p.errToObj(e));
   }
   trim() {
-    return new O({
+    return new N({
       ...this._def,
       checks: [...this._def.checks, { kind: "trim" }]
     });
   }
   toLowerCase() {
-    return new O({
+    return new N({
       ...this._def,
       checks: [...this._def.checks, { kind: "toLowerCase" }]
     });
   }
   toUpperCase() {
-    return new O({
+    return new N({
       ...this._def,
       checks: [...this._def.checks, { kind: "toUpperCase" }]
     });
@@ -983,60 +983,60 @@ class O extends b {
     return e;
   }
 }
-O.create = (a) => new O({
+N.create = (a) => new N({
   checks: [],
-  typeName: f.ZodString,
+  typeName: g.ZodString,
   coerce: (a == null ? void 0 : a.coerce) ?? !1,
   ...y(a)
 });
-function ft(a, e) {
-  const t = (a.toString().split(".")[1] || "").length, s = (e.toString().split(".")[1] || "").length, n = t > s ? t : s, i = Number.parseInt(a.toFixed(n).replace(".", "")), r = Number.parseInt(e.toFixed(n).replace(".", ""));
-  return i % r / 10 ** n;
+function bt(a, e) {
+  const t = (a.toString().split(".")[1] || "").length, s = (e.toString().split(".")[1] || "").length, i = t > s ? t : s, n = Number.parseInt(a.toFixed(i).replace(".", "")), r = Number.parseInt(e.toFixed(i).replace(".", ""));
+  return n % r / 10 ** i;
 }
-class W extends b {
+class X extends x {
   constructor() {
     super(...arguments), this.min = this.gte, this.max = this.lte, this.step = this.multipleOf;
   }
   _parse(e) {
     if (this._def.coerce && (e.data = Number(e.data)), this._getType(e) !== l.number) {
-      const i = this._getOrReturnCtx(e);
-      return c(i, {
+      const n = this._getOrReturnCtx(e);
+      return c(n, {
         code: d.invalid_type,
         expected: l.number,
-        received: i.parsedType
-      }), g;
+        received: n.parsedType
+      }), m;
     }
     let s;
-    const n = new S();
-    for (const i of this._def.checks)
-      i.kind === "int" ? x.isInteger(e.data) || (s = this._getOrReturnCtx(e, s), c(s, {
+    const i = new S();
+    for (const n of this._def.checks)
+      n.kind === "int" ? b.isInteger(e.data) || (s = this._getOrReturnCtx(e, s), c(s, {
         code: d.invalid_type,
         expected: "integer",
         received: "float",
-        message: i.message
-      }), n.dirty()) : i.kind === "min" ? (i.inclusive ? e.data < i.value : e.data <= i.value) && (s = this._getOrReturnCtx(e, s), c(s, {
+        message: n.message
+      }), i.dirty()) : n.kind === "min" ? (n.inclusive ? e.data < n.value : e.data <= n.value) && (s = this._getOrReturnCtx(e, s), c(s, {
         code: d.too_small,
-        minimum: i.value,
+        minimum: n.value,
         type: "number",
-        inclusive: i.inclusive,
+        inclusive: n.inclusive,
         exact: !1,
-        message: i.message
-      }), n.dirty()) : i.kind === "max" ? (i.inclusive ? e.data > i.value : e.data >= i.value) && (s = this._getOrReturnCtx(e, s), c(s, {
+        message: n.message
+      }), i.dirty()) : n.kind === "max" ? (n.inclusive ? e.data > n.value : e.data >= n.value) && (s = this._getOrReturnCtx(e, s), c(s, {
         code: d.too_big,
-        maximum: i.value,
+        maximum: n.value,
         type: "number",
-        inclusive: i.inclusive,
+        inclusive: n.inclusive,
         exact: !1,
-        message: i.message
-      }), n.dirty()) : i.kind === "multipleOf" ? ft(e.data, i.value) !== 0 && (s = this._getOrReturnCtx(e, s), c(s, {
+        message: n.message
+      }), i.dirty()) : n.kind === "multipleOf" ? bt(e.data, n.value) !== 0 && (s = this._getOrReturnCtx(e, s), c(s, {
         code: d.not_multiple_of,
-        multipleOf: i.value,
-        message: i.message
-      }), n.dirty()) : i.kind === "finite" ? Number.isFinite(e.data) || (s = this._getOrReturnCtx(e, s), c(s, {
+        multipleOf: n.value,
+        message: n.message
+      }), i.dirty()) : n.kind === "finite" ? Number.isFinite(e.data) || (s = this._getOrReturnCtx(e, s), c(s, {
         code: d.not_finite,
-        message: i.message
-      }), n.dirty()) : x.assertNever(i);
-    return { status: n.value, value: e.data };
+        message: n.message
+      }), i.dirty()) : b.assertNever(n);
+    return { status: i.value, value: e.data };
   }
   gte(e, t) {
     return this.setLimit("min", e, !0, p.toString(t));
@@ -1050,8 +1050,8 @@ class W extends b {
   lt(e, t) {
     return this.setLimit("max", e, !1, p.toString(t));
   }
-  setLimit(e, t, s, n) {
-    return new W({
+  setLimit(e, t, s, i) {
+    return new X({
       ...this._def,
       checks: [
         ...this._def.checks,
@@ -1059,13 +1059,13 @@ class W extends b {
           kind: e,
           value: t,
           inclusive: s,
-          message: p.toString(n)
+          message: p.toString(i)
         }
       ]
     });
   }
   _addCheck(e) {
-    return new W({
+    return new X({
       ...this._def,
       checks: [...this._def.checks, e]
     });
@@ -1147,7 +1147,7 @@ class W extends b {
     return e;
   }
   get isInt() {
-    return !!this._def.checks.find((e) => e.kind === "int" || e.kind === "multipleOf" && x.isInteger(e.value));
+    return !!this._def.checks.find((e) => e.kind === "int" || e.kind === "multipleOf" && b.isInteger(e.value));
   }
   get isFinite() {
     let e = null, t = null;
@@ -1159,13 +1159,13 @@ class W extends b {
     return Number.isFinite(t) && Number.isFinite(e);
   }
 }
-W.create = (a) => new W({
+X.create = (a) => new X({
   checks: [],
-  typeName: f.ZodNumber,
+  typeName: g.ZodNumber,
   coerce: (a == null ? void 0 : a.coerce) || !1,
   ...y(a)
 });
-class Q extends b {
+class ee extends x {
   constructor() {
     super(...arguments), this.min = this.gte, this.max = this.lte;
   }
@@ -1179,26 +1179,26 @@ class Q extends b {
     if (this._getType(e) !== l.bigint)
       return this._getInvalidInput(e);
     let s;
-    const n = new S();
-    for (const i of this._def.checks)
-      i.kind === "min" ? (i.inclusive ? e.data < i.value : e.data <= i.value) && (s = this._getOrReturnCtx(e, s), c(s, {
+    const i = new S();
+    for (const n of this._def.checks)
+      n.kind === "min" ? (n.inclusive ? e.data < n.value : e.data <= n.value) && (s = this._getOrReturnCtx(e, s), c(s, {
         code: d.too_small,
         type: "bigint",
-        minimum: i.value,
-        inclusive: i.inclusive,
-        message: i.message
-      }), n.dirty()) : i.kind === "max" ? (i.inclusive ? e.data > i.value : e.data >= i.value) && (s = this._getOrReturnCtx(e, s), c(s, {
+        minimum: n.value,
+        inclusive: n.inclusive,
+        message: n.message
+      }), i.dirty()) : n.kind === "max" ? (n.inclusive ? e.data > n.value : e.data >= n.value) && (s = this._getOrReturnCtx(e, s), c(s, {
         code: d.too_big,
         type: "bigint",
-        maximum: i.value,
-        inclusive: i.inclusive,
-        message: i.message
-      }), n.dirty()) : i.kind === "multipleOf" ? e.data % i.value !== BigInt(0) && (s = this._getOrReturnCtx(e, s), c(s, {
+        maximum: n.value,
+        inclusive: n.inclusive,
+        message: n.message
+      }), i.dirty()) : n.kind === "multipleOf" ? e.data % n.value !== BigInt(0) && (s = this._getOrReturnCtx(e, s), c(s, {
         code: d.not_multiple_of,
-        multipleOf: i.value,
-        message: i.message
-      }), n.dirty()) : x.assertNever(i);
-    return { status: n.value, value: e.data };
+        multipleOf: n.value,
+        message: n.message
+      }), i.dirty()) : b.assertNever(n);
+    return { status: i.value, value: e.data };
   }
   _getInvalidInput(e) {
     const t = this._getOrReturnCtx(e);
@@ -1206,7 +1206,7 @@ class Q extends b {
       code: d.invalid_type,
       expected: l.bigint,
       received: t.parsedType
-    }), g;
+    }), m;
   }
   gte(e, t) {
     return this.setLimit("min", e, !0, p.toString(t));
@@ -1220,8 +1220,8 @@ class Q extends b {
   lt(e, t) {
     return this.setLimit("max", e, !1, p.toString(t));
   }
-  setLimit(e, t, s, n) {
-    return new Q({
+  setLimit(e, t, s, i) {
+    return new ee({
       ...this._def,
       checks: [
         ...this._def.checks,
@@ -1229,13 +1229,13 @@ class Q extends b {
           kind: e,
           value: t,
           inclusive: s,
-          message: p.toString(n)
+          message: p.toString(i)
         }
       ]
     });
   }
   _addCheck(e) {
-    return new Q({
+    return new ee({
       ...this._def,
       checks: [...this._def.checks, e]
     });
@@ -1292,13 +1292,13 @@ class Q extends b {
     return e;
   }
 }
-Q.create = (a) => new Q({
+ee.create = (a) => new ee({
   checks: [],
-  typeName: f.ZodBigInt,
+  typeName: g.ZodBigInt,
   coerce: (a == null ? void 0 : a.coerce) ?? !1,
   ...y(a)
 });
-class ue extends b {
+class ue extends x {
   _parse(e) {
     if (this._def.coerce && (e.data = !!e.data), this._getType(e) !== l.boolean) {
       const s = this._getOrReturnCtx(e);
@@ -1306,57 +1306,57 @@ class ue extends b {
         code: d.invalid_type,
         expected: l.boolean,
         received: s.parsedType
-      }), g;
+      }), m;
     }
-    return C(e.data);
+    return R(e.data);
   }
 }
 ue.create = (a) => new ue({
-  typeName: f.ZodBoolean,
+  typeName: g.ZodBoolean,
   coerce: (a == null ? void 0 : a.coerce) || !1,
   ...y(a)
 });
-class ae extends b {
+class ne extends x {
   _parse(e) {
     if (this._def.coerce && (e.data = new Date(e.data)), this._getType(e) !== l.date) {
-      const i = this._getOrReturnCtx(e);
-      return c(i, {
+      const n = this._getOrReturnCtx(e);
+      return c(n, {
         code: d.invalid_type,
         expected: l.date,
-        received: i.parsedType
-      }), g;
+        received: n.parsedType
+      }), m;
     }
     if (Number.isNaN(e.data.getTime())) {
-      const i = this._getOrReturnCtx(e);
-      return c(i, {
+      const n = this._getOrReturnCtx(e);
+      return c(n, {
         code: d.invalid_date
-      }), g;
+      }), m;
     }
     const s = new S();
-    let n;
-    for (const i of this._def.checks)
-      i.kind === "min" ? e.data.getTime() < i.value && (n = this._getOrReturnCtx(e, n), c(n, {
+    let i;
+    for (const n of this._def.checks)
+      n.kind === "min" ? e.data.getTime() < n.value && (i = this._getOrReturnCtx(e, i), c(i, {
         code: d.too_small,
-        message: i.message,
+        message: n.message,
         inclusive: !0,
         exact: !1,
-        minimum: i.value,
+        minimum: n.value,
         type: "date"
-      }), s.dirty()) : i.kind === "max" ? e.data.getTime() > i.value && (n = this._getOrReturnCtx(e, n), c(n, {
+      }), s.dirty()) : n.kind === "max" ? e.data.getTime() > n.value && (i = this._getOrReturnCtx(e, i), c(i, {
         code: d.too_big,
-        message: i.message,
+        message: n.message,
         inclusive: !0,
         exact: !1,
-        maximum: i.value,
+        maximum: n.value,
         type: "date"
-      }), s.dirty()) : x.assertNever(i);
+      }), s.dirty()) : b.assertNever(n);
     return {
       status: s.value,
       value: new Date(e.data.getTime())
     };
   }
   _addCheck(e) {
-    return new ae({
+    return new ne({
       ...this._def,
       checks: [...this._def.checks, e]
     });
@@ -1388,13 +1388,13 @@ class ae extends b {
     return e != null ? new Date(e) : null;
   }
 }
-ae.create = (a) => new ae({
+ne.create = (a) => new ne({
   checks: [],
   coerce: (a == null ? void 0 : a.coerce) || !1,
-  typeName: f.ZodDate,
+  typeName: g.ZodDate,
   ...y(a)
 });
-class Te extends b {
+class Ce extends x {
   _parse(e) {
     if (this._getType(e) !== l.symbol) {
       const s = this._getOrReturnCtx(e);
@@ -1402,16 +1402,16 @@ class Te extends b {
         code: d.invalid_type,
         expected: l.symbol,
         received: s.parsedType
-      }), g;
+      }), m;
     }
-    return C(e.data);
+    return R(e.data);
   }
 }
-Te.create = (a) => new Te({
-  typeName: f.ZodSymbol,
+Ce.create = (a) => new Ce({
+  typeName: g.ZodSymbol,
   ...y(a)
 });
-class Se extends b {
+class Re extends x {
   _parse(e) {
     if (this._getType(e) !== l.undefined) {
       const s = this._getOrReturnCtx(e);
@@ -1419,16 +1419,16 @@ class Se extends b {
         code: d.invalid_type,
         expected: l.undefined,
         received: s.parsedType
-      }), g;
+      }), m;
     }
-    return C(e.data);
+    return R(e.data);
   }
 }
-Se.create = (a) => new Se({
-  typeName: f.ZodUndefined,
+Re.create = (a) => new Re({
+  typeName: g.ZodUndefined,
   ...y(a)
 });
-class Re extends b {
+class Ee extends x {
   _parse(e) {
     if (this._getType(e) !== l.null) {
       const s = this._getOrReturnCtx(e);
@@ -1436,54 +1436,54 @@ class Re extends b {
         code: d.invalid_type,
         expected: l.null,
         received: s.parsedType
-      }), g;
+      }), m;
     }
-    return C(e.data);
+    return R(e.data);
   }
 }
-Re.create = (a) => new Re({
-  typeName: f.ZodNull,
+Ee.create = (a) => new Ee({
+  typeName: g.ZodNull,
   ...y(a)
 });
-class he extends b {
+class he extends x {
   constructor() {
     super(...arguments), this._any = !0;
   }
   _parse(e) {
-    return C(e.data);
+    return R(e.data);
   }
 }
 he.create = (a) => new he({
-  typeName: f.ZodAny,
+  typeName: g.ZodAny,
   ...y(a)
 });
-class Ce extends b {
+class Ae extends x {
   constructor() {
     super(...arguments), this._unknown = !0;
   }
   _parse(e) {
-    return C(e.data);
+    return R(e.data);
   }
 }
-Ce.create = (a) => new Ce({
-  typeName: f.ZodUnknown,
+Ae.create = (a) => new Ae({
+  typeName: g.ZodUnknown,
   ...y(a)
 });
-class z extends b {
+class B extends x {
   _parse(e) {
     const t = this._getOrReturnCtx(e);
     return c(t, {
       code: d.invalid_type,
       expected: l.never,
       received: t.parsedType
-    }), g;
+    }), m;
   }
 }
-z.create = (a) => new z({
-  typeName: f.ZodNever,
+B.create = (a) => new B({
+  typeName: g.ZodNever,
   ...y(a)
 });
-class Ee extends b {
+class $e extends x {
   _parse(e) {
     if (this._getType(e) !== l.undefined) {
       const s = this._getOrReturnCtx(e);
@@ -1491,72 +1491,72 @@ class Ee extends b {
         code: d.invalid_type,
         expected: l.void,
         received: s.parsedType
-      }), g;
+      }), m;
     }
-    return C(e.data);
+    return R(e.data);
   }
 }
-Ee.create = (a) => new Ee({
-  typeName: f.ZodVoid,
+$e.create = (a) => new $e({
+  typeName: g.ZodVoid,
   ...y(a)
 });
-class A extends b {
+class $ extends x {
   _parse(e) {
-    const { ctx: t, status: s } = this._processInputParams(e), n = this._def;
+    const { ctx: t, status: s } = this._processInputParams(e), i = this._def;
     if (t.parsedType !== l.array)
       return c(t, {
         code: d.invalid_type,
         expected: l.array,
         received: t.parsedType
-      }), g;
-    if (n.exactLength !== null) {
-      const r = t.data.length > n.exactLength.value, o = t.data.length < n.exactLength.value;
+      }), m;
+    if (i.exactLength !== null) {
+      const r = t.data.length > i.exactLength.value, o = t.data.length < i.exactLength.value;
       (r || o) && (c(t, {
         code: r ? d.too_big : d.too_small,
-        minimum: o ? n.exactLength.value : void 0,
-        maximum: r ? n.exactLength.value : void 0,
+        minimum: o ? i.exactLength.value : void 0,
+        maximum: r ? i.exactLength.value : void 0,
         type: "array",
         inclusive: !0,
         exact: !0,
-        message: n.exactLength.message
+        message: i.exactLength.message
       }), s.dirty());
     }
-    if (n.minLength !== null && t.data.length < n.minLength.value && (c(t, {
+    if (i.minLength !== null && t.data.length < i.minLength.value && (c(t, {
       code: d.too_small,
-      minimum: n.minLength.value,
+      minimum: i.minLength.value,
       type: "array",
       inclusive: !0,
       exact: !1,
-      message: n.minLength.message
-    }), s.dirty()), n.maxLength !== null && t.data.length > n.maxLength.value && (c(t, {
+      message: i.minLength.message
+    }), s.dirty()), i.maxLength !== null && t.data.length > i.maxLength.value && (c(t, {
       code: d.too_big,
-      maximum: n.maxLength.value,
+      maximum: i.maxLength.value,
       type: "array",
       inclusive: !0,
       exact: !1,
-      message: n.maxLength.message
+      message: i.maxLength.message
     }), s.dirty()), t.common.async)
-      return Promise.all([...t.data].map((r, o) => n.type._parseAsync(new $(t, r, t.path, o)))).then((r) => S.mergeArray(s, r));
-    const i = [...t.data].map((r, o) => n.type._parseSync(new $(t, r, t.path, o)));
-    return S.mergeArray(s, i);
+      return Promise.all([...t.data].map((r, o) => i.type._parseAsync(new I(t, r, t.path, o)))).then((r) => S.mergeArray(s, r));
+    const n = [...t.data].map((r, o) => i.type._parseSync(new I(t, r, t.path, o)));
+    return S.mergeArray(s, n);
   }
   get element() {
     return this._def.type;
   }
   min(e, t) {
-    return new A({
+    return new $({
       ...this._def,
       minLength: { value: e, message: p.toString(t) }
     });
   }
   max(e, t) {
-    return new A({
+    return new $({
       ...this._def,
       maxLength: { value: e, message: p.toString(t) }
     });
   }
   length(e, t) {
-    return new A({
+    return new $({
       ...this._def,
       exactLength: { value: e, message: p.toString(t) }
     });
@@ -1565,38 +1565,38 @@ class A extends b {
     return this.min(1, e);
   }
 }
-A.create = (a, e) => new A({
+$.create = (a, e) => new $({
   type: a,
   minLength: null,
   maxLength: null,
   exactLength: null,
-  typeName: f.ZodArray,
+  typeName: g.ZodArray,
   ...y(e)
 });
-function V(a) {
-  if (a instanceof _) {
+function q(a) {
+  if (a instanceof k) {
     const e = {};
     for (const t in a.shape) {
       const s = a.shape[t];
-      e[t] = Z.create(V(s));
+      e[t] = L.create(q(s));
     }
-    return new _({
+    return new k({
       ...a._def,
       shape: () => e
     });
-  } else return a instanceof A ? new A({
+  } else return a instanceof $ ? new $({
     ...a._def,
-    type: V(a.element)
-  }) : a instanceof Z ? Z.create(V(a.unwrap())) : a instanceof G ? G.create(V(a.unwrap())) : a instanceof B ? B.create(a.items.map((e) => V(e))) : a;
+    type: q(a.element)
+  }) : a instanceof L ? L.create(q(a.unwrap())) : a instanceof J ? J.create(q(a.unwrap())) : a instanceof V ? V.create(a.items.map((e) => q(e))) : a;
 }
-class _ extends b {
+class k extends x {
   constructor() {
     super(...arguments), this._cached = null, this.nonstrict = this.passthrough, this.augment = this.extend;
   }
   _getCached() {
     if (this._cached !== null)
       return this._cached;
-    const e = this._def.shape(), t = x.objectKeys(e);
+    const e = this._def.shape(), t = b.objectKeys(e);
     return this._cached = { shape: e, keys: t }, this._cached;
   }
   _parse(e) {
@@ -1606,31 +1606,31 @@ class _ extends b {
         code: d.invalid_type,
         expected: l.object,
         received: h.parsedType
-      }), g;
+      }), m;
     }
-    const { status: s, ctx: n } = this._processInputParams(e), { shape: i, keys: r } = this._getCached(), o = [];
-    if (!(this._def.catchall instanceof z && this._def.unknownKeys === "strip"))
-      for (const h in n.data)
+    const { status: s, ctx: i } = this._processInputParams(e), { shape: n, keys: r } = this._getCached(), o = [];
+    if (!(this._def.catchall instanceof B && this._def.unknownKeys === "strip"))
+      for (const h in i.data)
         r.includes(h) || o.push(h);
     const u = [];
     for (const h of r) {
-      const v = i[h], E = n.data[h];
+      const v = n[h], A = i.data[h];
       u.push({
         key: { status: "valid", value: h },
-        value: v._parse(new $(n, E, n.path, h)),
-        alwaysSet: h in n.data
+        value: v._parse(new I(i, A, i.path, h)),
+        alwaysSet: h in i.data
       });
     }
-    if (this._def.catchall instanceof z) {
+    if (this._def.catchall instanceof B) {
       const h = this._def.unknownKeys;
       if (h === "passthrough")
         for (const v of o)
           u.push({
             key: { status: "valid", value: v },
-            value: { status: "valid", value: n.data[v] }
+            value: { status: "valid", value: i.data[v] }
           });
       else if (h === "strict")
-        o.length > 0 && (c(n, {
+        o.length > 0 && (c(i, {
           code: d.unrecognized_keys,
           keys: o
         }), s.dirty());
@@ -1638,24 +1638,24 @@ class _ extends b {
     } else {
       const h = this._def.catchall;
       for (const v of o) {
-        const E = n.data[v];
+        const A = i.data[v];
         u.push({
           key: { status: "valid", value: v },
           value: h._parse(
-            new $(n, E, n.path, v)
+            new I(i, A, i.path, v)
             //, ctx.child(key), value, getParsedType(value)
           ),
-          alwaysSet: v in n.data
+          alwaysSet: v in i.data
         });
       }
     }
-    return n.common.async ? Promise.resolve().then(async () => {
+    return i.common.async ? Promise.resolve().then(async () => {
       const h = [];
       for (const v of u) {
-        const E = await v.key, L = await v.value;
+        const A = await v.key, D = await v.value;
         h.push({
-          key: E,
-          value: L,
+          key: A,
+          value: D,
           alwaysSet: v.alwaysSet
         });
       }
@@ -1666,30 +1666,30 @@ class _ extends b {
     return this._def.shape();
   }
   strict(e) {
-    return p.errToObj, new _({
+    return p.errToObj, new k({
       ...this._def,
       unknownKeys: "strict",
       ...e !== void 0 ? {
         errorMap: (t, s) => {
-          var i, r;
-          const n = ((r = (i = this._def).errorMap) == null ? void 0 : r.call(i, t, s).message) ?? s.defaultError;
+          var n, r;
+          const i = ((r = (n = this._def).errorMap) == null ? void 0 : r.call(n, t, s).message) ?? s.defaultError;
           return t.code === "unrecognized_keys" ? {
-            message: p.errToObj(e).message ?? n
+            message: p.errToObj(e).message ?? i
           } : {
-            message: n
+            message: i
           };
         }
       } : {}
     });
   }
   strip() {
-    return new _({
+    return new k({
       ...this._def,
       unknownKeys: "strip"
     });
   }
   passthrough() {
-    return new _({
+    return new k({
       ...this._def,
       unknownKeys: "passthrough"
     });
@@ -1712,7 +1712,7 @@ class _ extends b {
   //     }) as any;
   //   };
   extend(e) {
-    return new _({
+    return new k({
       ...this._def,
       shape: () => ({
         ...this._def.shape(),
@@ -1726,14 +1726,14 @@ class _ extends b {
    * upgrade if you are experiencing issues.
    */
   merge(e) {
-    return new _({
+    return new k({
       unknownKeys: e._def.unknownKeys,
       catchall: e._def.catchall,
       shape: () => ({
         ...this._def.shape(),
         ...e._def.shape()
       }),
-      typeName: f.ZodObject
+      typeName: g.ZodObject
     });
   }
   // merge<
@@ -1796,25 +1796,25 @@ class _ extends b {
   //   return merged;
   // }
   catchall(e) {
-    return new _({
+    return new k({
       ...this._def,
       catchall: e
     });
   }
   pick(e) {
     const t = {};
-    for (const s of x.objectKeys(e))
+    for (const s of b.objectKeys(e))
       e[s] && this.shape[s] && (t[s] = this.shape[s]);
-    return new _({
+    return new k({
       ...this._def,
       shape: () => t
     });
   }
   omit(e) {
     const t = {};
-    for (const s of x.objectKeys(this.shape))
+    for (const s of b.objectKeys(this.shape))
       e[s] || (t[s] = this.shape[s]);
-    return new _({
+    return new k({
       ...this._def,
       shape: () => t
     });
@@ -1823,78 +1823,78 @@ class _ extends b {
    * @deprecated
    */
   deepPartial() {
-    return V(this);
+    return q(this);
   }
   partial(e) {
     const t = {};
-    for (const s of x.objectKeys(this.shape)) {
-      const n = this.shape[s];
-      e && !e[s] ? t[s] = n : t[s] = n.optional();
+    for (const s of b.objectKeys(this.shape)) {
+      const i = this.shape[s];
+      e && !e[s] ? t[s] = i : t[s] = i.optional();
     }
-    return new _({
+    return new k({
       ...this._def,
       shape: () => t
     });
   }
   required(e) {
     const t = {};
-    for (const s of x.objectKeys(this.shape))
+    for (const s of b.objectKeys(this.shape))
       if (e && !e[s])
         t[s] = this.shape[s];
       else {
-        let i = this.shape[s];
-        for (; i instanceof Z; )
-          i = i._def.innerType;
-        t[s] = i;
+        let n = this.shape[s];
+        for (; n instanceof L; )
+          n = n._def.innerType;
+        t[s] = n;
       }
-    return new _({
+    return new k({
       ...this._def,
       shape: () => t
     });
   }
   keyof() {
-    return Ze(x.objectKeys(this.shape));
+    return Pe(b.objectKeys(this.shape));
   }
 }
-_.create = (a, e) => new _({
+k.create = (a, e) => new k({
   shape: () => a,
   unknownKeys: "strip",
-  catchall: z.create(),
-  typeName: f.ZodObject,
+  catchall: B.create(),
+  typeName: g.ZodObject,
   ...y(e)
 });
-_.strictCreate = (a, e) => new _({
+k.strictCreate = (a, e) => new k({
   shape: () => a,
   unknownKeys: "strict",
-  catchall: z.create(),
-  typeName: f.ZodObject,
+  catchall: B.create(),
+  typeName: g.ZodObject,
   ...y(e)
 });
-_.lazycreate = (a, e) => new _({
+k.lazycreate = (a, e) => new k({
   shape: a,
   unknownKeys: "strip",
-  catchall: z.create(),
-  typeName: f.ZodObject,
+  catchall: B.create(),
+  typeName: g.ZodObject,
   ...y(e)
 });
-class ie extends b {
+class ie extends x {
   _parse(e) {
     const { ctx: t } = this._processInputParams(e), s = this._def.options;
-    function n(i) {
-      for (const o of i)
+    function i(n) {
+      for (const o of n)
         if (o.result.status === "valid")
           return o.result;
-      for (const o of i)
+      for (const o of n)
         if (o.result.status === "dirty")
           return t.common.issues.push(...o.ctx.common.issues), o.result;
-      const r = i.map((o) => new N(o.ctx.common.issues));
+      const r = n.map((o) => new Z(o.ctx.common.issues));
       return c(t, {
         code: d.invalid_union,
         unionErrors: r
-      }), g;
+      }), m;
     }
     if (t.common.async)
-      return Promise.all(s.map(async (i) => {
+      return Promise.all(s.map(async (n) => {
         const r = {
           ...t,
           common: {
@@ -1904,16 +1904,16 @@ class ie extends b {
           parent: null
         };
         return {
-          result: await i._parseAsync({
+          result: await n._parseAsync({
             data: t.data,
             path: t.path,
             parent: r
           }),
           ctx: r
         };
-      })).then(n);
+      })).then(i);
     {
-      let i;
+      let n;
       const r = [];
       for (const u of s) {
         const h = {
@@ -1930,15 +1930,15 @@ class ie extends b {
         });
         if (v.status === "valid")
           return v;
-        v.status === "dirty" && !i && (i = { result: v, ctx: h }), h.common.issues.length && r.push(h.common.issues);
+        v.status === "dirty" && !n && (n = { result: v, ctx: h }), h.common.issues.length && r.push(h.common.issues);
       }
-      if (i)
-        return t.common.issues.push(...i.ctx.common.issues), i.result;
-      const o = r.map((u) => new N(u));
+      if (n)
+        return t.common.issues.push(...n.ctx.common.issues), n.result;
+      const o = r.map((u) => new Z(u));
       return c(t, {
         code: d.invalid_union,
         unionErrors: o
-      }), g;
+      }), m;
     }
   }
   get options() {
@@ -1947,16 +1947,16 @@ class ie extends b {
 }
 ie.create = (a, e) => new ie({
   options: a,
-  typeName: f.ZodUnion,
+  typeName: g.ZodUnion,
   ...y(e)
 });
 function pe(a, e) {
-  const t = j(a), s = j(e);
+  const t = P(a), s = P(e);
   if (a === e)
     return { valid: !0, data: a };
   if (t === l.object && s === l.object) {
-    const n = x.objectKeys(e), i = x.objectKeys(a).filter((o) => n.indexOf(o) !== -1), r = { ...a, ...e };
-    for (const o of i) {
+    const i = b.objectKeys(e), n = b.objectKeys(a).filter((o) => i.indexOf(o) !== -1), r = { ...a, ...e };
+    for (const o of n) {
       const u = pe(a[o], e[o]);
       if (!u.valid)
         return { valid: !1 };
@@ -1966,25 +1966,25 @@ function pe(a, e) {
   } else if (t === l.array && s === l.array) {
     if (a.length !== e.length)
       return { valid: !1 };
-    const n = [];
-    for (let i = 0; i < a.length; i++) {
-      const r = a[i], o = e[i], u = pe(r, o);
+    const i = [];
+    for (let n = 0; n < a.length; n++) {
+      const r = a[n], o = e[n], u = pe(r, o);
       if (!u.valid)
         return { valid: !1 };
-      n.push(u.data);
+      i.push(u.data);
     }
-    return { valid: !0, data: n };
+    return { valid: !0, data: i };
   } else return t === l.date && s === l.date && +a == +e ? { valid: !0, data: a } : { valid: !1 };
 }
-class ne extends b {
+class re extends x {
   _parse(e) {
-    const { status: t, ctx: s } = this._processInputParams(e), n = (i, r) => {
-      if (_e(i) || _e(r))
-        return g;
-      const o = pe(i.value, r.value);
-      return o.valid ? ((ke(i) || ke(r)) && t.dirty(), { status: t.value, value: o.data }) : (c(s, {
+    const { status: t, ctx: s } = this._processInputParams(e), i = (n, r) => {
+      if (we(n) || we(r))
+        return m;
+      const o = pe(n.value, r.value);
+      return o.valid ? ((Te(n) || Te(r)) && t.dirty(), { status: t.value, value: o.data }) : (c(s, {
         code: d.invalid_intersection_types
-      }), g);
+      }), m);
     };
     return s.common.async ? Promise.all([
       this._def.left._parseAsync({
@@ -1997,7 +1997,7 @@ class ne extends b {
         path: s.path,
         parent: s
       })
-    ]).then(([i, r]) => n(i, r)) : n(this._def.left._parseSync({
+    ]).then(([n, r]) => i(n, r)) : i(this._def.left._parseSync({
       data: s.data,
       path: s.path,
       parent: s
@@ -2008,13 +2008,13 @@ class ne extends b {
     }));
   }
 }
-ne.create = (a, e, t) => new ne({
+re.create = (a, e, t) => new re({
   left: a,
   right: e,
-  typeName: f.ZodIntersection,
+  typeName: g.ZodIntersection,
   ...y(t)
 });
-class B extends b {
+class V extends x {
   _parse(e) {
     const { status: t, ctx: s } = this._processInputParams(e);
     if (s.parsedType !== l.array)
@@ -2022,7 +2022,7 @@ class B extends b {
         code: d.invalid_type,
         expected: l.array,
         received: s.parsedType
-      }), g;
+      }), m;
     if (s.data.length < this._def.items.length)
       return c(s, {
         code: d.too_small,
@@ -2030,7 +2030,7 @@ class B extends b {
         inclusive: !0,
         exact: !1,
         type: "array"
-      }), g;
+      }), m;
     !this._def.rest && s.data.length > this._def.items.length && (c(s, {
       code: d.too_big,
       maximum: this._def.items.length,
@@ -2038,33 +2038,33 @@ class B extends b {
       exact: !1,
       type: "array"
     }), t.dirty());
-    const i = [...s.data].map((r, o) => {
+    const n = [...s.data].map((r, o) => {
       const u = this._def.items[o] || this._def.rest;
-      return u ? u._parse(new $(s, r, s.path, o)) : null;
+      return u ? u._parse(new I(s, r, s.path, o)) : null;
     }).filter((r) => !!r);
-    return s.common.async ? Promise.all(i).then((r) => S.mergeArray(t, r)) : S.mergeArray(t, i);
+    return s.common.async ? Promise.all(n).then((r) => S.mergeArray(t, r)) : S.mergeArray(t, n);
   }
   get items() {
     return this._def.items;
   }
   rest(e) {
-    return new B({
+    return new V({
       ...this._def,
       rest: e
     });
   }
 }
-B.create = (a, e) => {
+V.create = (a, e) => {
   if (!Array.isArray(a))
     throw new Error("You must pass an array of schemas to z.tuple([ ... ])");
-  return new B({
+  return new V({
     items: a,
-    typeName: f.ZodTuple,
+    typeName: g.ZodTuple,
     rest: null,
     ...y(e)
   });
 };
-class re extends b {
+class oe extends x {
   get keySchema() {
     return this._def.keyType;
   }
@@ -2078,34 +2078,34 @@ class re extends b {
         code: d.invalid_type,
         expected: l.object,
         received: s.parsedType
-      }), g;
-    const n = [], i = this._def.keyType, r = this._def.valueType;
+      }), m;
+    const i = [], n = this._def.keyType, r = this._def.valueType;
     for (const o in s.data)
-      n.push({
-        key: i._parse(new $(s, o, s.path, o)),
-        value: r._parse(new $(s, s.data[o], s.path, o)),
+      i.push({
+        key: n._parse(new I(s, o, s.path, o)),
+        value: r._parse(new I(s, s.data[o], s.path, o)),
         alwaysSet: o in s.data
       });
-    return s.common.async ? S.mergeObjectAsync(t, n) : S.mergeObjectSync(t, n);
+    return s.common.async ? S.mergeObjectAsync(t, i) : S.mergeObjectSync(t, i);
   }
   get element() {
     return this._def.valueType;
   }
   static create(e, t, s) {
-    return t instanceof b ? new re({
+    return t instanceof x ? new oe({
       keyType: e,
       valueType: t,
-      typeName: f.ZodRecord,
+      typeName: g.ZodRecord,
       ...y(s)
-    }) : new re({
-      keyType: O.create(),
+    }) : new oe({
+      keyType: N.create(),
       valueType: e,
-      typeName: f.ZodRecord,
+      typeName: g.ZodRecord,
       ...y(t)
     });
   }
 }
-class Ae extends b {
+class Ie extends x {
   get keySchema() {
     return this._def.keyType;
   }
@@ -2119,10 +2119,10 @@ class Ae extends b {
         code: d.invalid_type,
         expected: l.map,
         received: s.parsedType
-      }), g;
-    const n = this._def.keyType, i = this._def.valueType, r = [...s.data.entries()].map(([o, u], h) => ({
-      key: n._parse(new $(s, o, s.path, [h, "key"])),
-      value: i._parse(new $(s, u, s.path, [h, "value"]))
+      }), m;
+    const i = this._def.keyType, n = this._def.valueType, r = [...s.data.entries()].map(([o, u], h) => ({
+      key: i._parse(new I(s, o, s.path, [h, "key"])),
+      value: n._parse(new I(s, u, s.path, [h, "value"]))
     }));
     if (s.common.async) {
       const o = /* @__PURE__ */ new Map();
@@ -2130,7 +2130,7 @@ class Ae extends b {
         for (const u of r) {
           const h = await u.key, v = await u.value;
           if (h.status === "aborted" || v.status === "aborted")
-            return g;
+            return m;
           (h.status === "dirty" || v.status === "dirty") && t.dirty(), o.set(h.value, v.value);
         }
         return { status: t.value, value: o };
@@ -2140,20 +2140,20 @@ class Ae extends b {
       for (const u of r) {
         const h = u.key, v = u.value;
         if (h.status === "aborted" || v.status === "aborted")
-          return g;
+          return m;
         (h.status === "dirty" || v.status === "dirty") && t.dirty(), o.set(h.value, v.value);
       }
       return { status: t.value, value: o };
     }
   }
 }
-Ae.create = (a, e, t) => new Ae({
+Ie.create = (a, e, t) => new Ie({
   valueType: e,
   keyType: a,
-  typeName: f.ZodMap,
+  typeName: g.ZodMap,
   ...y(t)
 });
-class ee extends b {
+class te extends x {
   _parse(e) {
     const { status: t, ctx: s } = this._processInputParams(e);
     if (s.parsedType !== l.set)
@@ -2161,44 +2161,44 @@ class ee extends b {
         code: d.invalid_type,
         expected: l.set,
         received: s.parsedType
-      }), g;
-    const n = this._def;
-    n.minSize !== null && s.data.size < n.minSize.value && (c(s, {
+      }), m;
+    const i = this._def;
+    i.minSize !== null && s.data.size < i.minSize.value && (c(s, {
       code: d.too_small,
-      minimum: n.minSize.value,
+      minimum: i.minSize.value,
       type: "set",
       inclusive: !0,
       exact: !1,
-      message: n.minSize.message
-    }), t.dirty()), n.maxSize !== null && s.data.size > n.maxSize.value && (c(s, {
+      message: i.minSize.message
+    }), t.dirty()), i.maxSize !== null && s.data.size > i.maxSize.value && (c(s, {
       code: d.too_big,
-      maximum: n.maxSize.value,
+      maximum: i.maxSize.value,
       type: "set",
       inclusive: !0,
       exact: !1,
-      message: n.maxSize.message
+      message: i.maxSize.message
     }), t.dirty());
-    const i = this._def.valueType;
+    const n = this._def.valueType;
     function r(u) {
       const h = /* @__PURE__ */ new Set();
       for (const v of u) {
         if (v.status === "aborted")
-          return g;
+          return m;
         v.status === "dirty" && t.dirty(), h.add(v.value);
       }
       return { status: t.value, value: h };
     }
-    const o = [...s.data.values()].map((u, h) => i._parse(new $(s, u, s.path, h)));
+    const o = [...s.data.values()].map((u, h) => n._parse(new I(s, u, s.path, h)));
     return s.common.async ? Promise.all(o).then((u) => r(u)) : r(o);
   }
   min(e, t) {
-    return new ee({
+    return new te({
       ...this._def,
       minSize: { value: e, message: p.toString(t) }
     });
   }
   max(e, t) {
-    return new ee({
+    return new te({
       ...this._def,
       maxSize: { value: e, message: p.toString(t) }
     });
@@ -2210,14 +2210,14 @@ class ee extends b {
     return this.min(1, e);
   }
 }
-ee.create = (a, e) => new ee({
+te.create = (a, e) => new te({
   valueType: a,
   minSize: null,
   maxSize: null,
-  typeName: f.ZodSet,
+  typeName: g.ZodSet,
   ...y(e)
 });
-class $e extends b {
+class Oe extends x {
   get schema() {
     return this._def.getter();
   }
@@ -2226,12 +2226,12 @@ class $e extends b {
     return this._def.getter()._parse({ data: t.data, path: t.path, parent: t });
   }
 }
-$e.create = (a, e) => new $e({
+Oe.create = (a, e) => new Oe({
   getter: a,
-  typeName: f.ZodLazy,
+  typeName: g.ZodLazy,
   ...y(e)
 });
-class fe extends b {
+class fe extends x {
   _parse(e) {
     if (e.data !== this._def.value) {
       const t = this._getOrReturnCtx(e);
@@ -2239,7 +2239,7 @@ class fe extends b {
         received: t.data,
         code: d.invalid_literal,
         expected: this._def.value
-      }), g;
+      }), m;
     }
     return { status: "valid", value: e.data };
   }
@@ -2249,25 +2249,25 @@ class fe extends b {
 }
 fe.create = (a, e) => new fe({
   value: a,
-  typeName: f.ZodLiteral,
+  typeName: g.ZodLiteral,
   ...y(e)
 });
-function Ze(a, e) {
-  return new F({
+function Pe(a, e) {
+  return new H({
     values: a,
-    typeName: f.ZodEnum,
+    typeName: g.ZodEnum,
     ...y(e)
   });
 }
-class F extends b {
+class H extends x {
   _parse(e) {
     if (typeof e.data != "string") {
       const t = this._getOrReturnCtx(e), s = this._def.values;
       return c(t, {
-        expected: x.joinValues(s),
+        expected: b.joinValues(s),
         received: t.parsedType,
         code: d.invalid_type
-      }), g;
+      }), m;
     }
     if (this._cache || (this._cache = new Set(this._def.values)), !this._cache.has(e.data)) {
       const t = this._getOrReturnCtx(e), s = this._def.values;
@@ -2275,9 +2275,9 @@ class F extends b {
         received: t.data,
         code: d.invalid_enum_value,
         options: s
-      }), g;
+      }), m;
     }
-    return C(e.data);
+    return R(e.data);
   }
   get options() {
     return this._def.values;
@@ -2301,50 +2301,50 @@ class F extends b {
     return e;
   }
   extract(e, t = this._def) {
-    return F.create(e, {
+    return H.create(e, {
       ...this._def,
       ...t
     });
   }
   exclude(e, t = this._def) {
-    return F.create(this.options.filter((s) => !e.includes(s)), {
+    return H.create(this.options.filter((s) => !e.includes(s)), {
       ...this._def,
       ...t
     });
   }
 }
-F.create = Ze;
-class Ie extends b {
+H.create = Pe;
+class Ne extends x {
   _parse(e) {
-    const t = x.getValidEnumValues(this._def.values), s = this._getOrReturnCtx(e);
+    const t = b.getValidEnumValues(this._def.values), s = this._getOrReturnCtx(e);
     if (s.parsedType !== l.string && s.parsedType !== l.number) {
-      const n = x.objectValues(t);
+      const i = b.objectValues(t);
       return c(s, {
-        expected: x.joinValues(n),
+        expected: b.joinValues(i),
         received: s.parsedType,
         code: d.invalid_type
-      }), g;
+      }), m;
     }
-    if (this._cache || (this._cache = new Set(x.getValidEnumValues(this._def.values))), !this._cache.has(e.data)) {
-      const n = x.objectValues(t);
+    if (this._cache || (this._cache = new Set(b.getValidEnumValues(this._def.values))), !this._cache.has(e.data)) {
+      const i = b.objectValues(t);
       return c(s, {
         received: s.data,
         code: d.invalid_enum_value,
-        options: n
-      }), g;
+        options: i
+      }), m;
     }
-    return C(e.data);
+    return R(e.data);
   }
   get enum() {
     return this._def.values;
   }
 }
-Ie.create = (a, e) => new Ie({
+Ne.create = (a, e) => new Ne({
   values: a,
-  typeName: f.ZodNativeEnum,
+  typeName: g.ZodNativeEnum,
   ...y(e)
 });
-class oe extends b {
+class de extends x {
   unwrap() {
     return this._def.type;
   }
@@ -2355,28 +2355,28 @@ class oe extends b {
         code: d.invalid_type,
         expected: l.promise,
         received: t.parsedType
-      }), g;
+      }), m;
     const s = t.parsedType === l.promise ? t.data : Promise.resolve(t.data);
-    return C(s.then((n) => this._def.type.parseAsync(n, {
+    return R(s.then((i) => this._def.type.parseAsync(i, {
       path: t.path,
       errorMap: t.common.contextualErrorMap
     })));
   }
 }
-oe.create = (a, e) => new oe({
+de.create = (a, e) => new de({
   type: a,
-  typeName: f.ZodPromise,
+  typeName: g.ZodPromise,
   ...y(e)
 });
-class X extends b {
+class G extends x {
   innerType() {
     return this._def.schema;
   }
   sourceType() {
-    return this._def.schema._def.typeName === f.ZodEffects ? this._def.schema.sourceType() : this._def.schema;
+    return this._def.schema._def.typeName === g.ZodEffects ? this._def.schema.sourceType() : this._def.schema;
   }
   _parse(e) {
-    const { status: t, ctx: s } = this._processInputParams(e), n = this._def.effect || null, i = {
+    const { status: t, ctx: s } = this._processInputParams(e), i = this._def.effect || null, n = {
       addIssue: (r) => {
         c(s, r), r.fatal ? t.abort() : t.dirty();
       },
@@ -2384,33 +2384,33 @@ class X extends b {
         return s.path;
       }
     };
-    if (i.addIssue = i.addIssue.bind(i), n.type === "preprocess") {
-      const r = n.transform(s.data, i);
+    if (n.addIssue = n.addIssue.bind(n), i.type === "preprocess") {
+      const r = i.transform(s.data, n);
       if (s.common.async)
         return Promise.resolve(r).then(async (o) => {
           if (t.value === "aborted")
-            return g;
+            return m;
           const u = await this._def.schema._parseAsync({
             data: o,
             path: s.path,
             parent: s
           });
-          return u.status === "aborted" ? g : u.status === "dirty" || t.value === "dirty" ? K(u.value) : u;
+          return u.status === "aborted" ? m : u.status === "dirty" || t.value === "dirty" ? Y(u.value) : u;
         });
       {
         if (t.value === "aborted")
-          return g;
+          return m;
         const o = this._def.schema._parseSync({
           data: r,
           path: s.path,
           parent: s
         });
-        return o.status === "aborted" ? g : o.status === "dirty" || t.value === "dirty" ? K(o.value) : o;
+        return o.status === "aborted" ? m : o.status === "dirty" || t.value === "dirty" ? Y(o.value) : o;
       }
     }
-    if (n.type === "refinement") {
+    if (i.type === "refinement") {
       const r = (o) => {
-        const u = n.refinement(o, i);
+        const u = i.refinement(o, n);
         if (s.common.async)
           return Promise.resolve(u);
         if (u instanceof Promise)
@@ -2423,70 +2423,70 @@ class X extends b {
           path: s.path,
           parent: s
         });
-        return o.status === "aborted" ? g : (o.status === "dirty" && t.dirty(), r(o.value), { status: t.value, value: o.value });
+        return o.status === "aborted" ? m : (o.status === "dirty" && t.dirty(), r(o.value), { status: t.value, value: o.value });
       } else
-        return this._def.schema._parseAsync({ data: s.data, path: s.path, parent: s }).then((o) => o.status === "aborted" ? g : (o.status === "dirty" && t.dirty(), r(o.value).then(() => ({ status: t.value, value: o.value }))));
+        return this._def.schema._parseAsync({ data: s.data, path: s.path, parent: s }).then((o) => o.status === "aborted" ? m : (o.status === "dirty" && t.dirty(), r(o.value).then(() => ({ status: t.value, value: o.value }))));
     }
-    if (n.type === "transform")
+    if (i.type === "transform")
       if (s.common.async === !1) {
         const r = this._def.schema._parseSync({
           data: s.data,
           path: s.path,
           parent: s
         });
-        if (!q(r))
-          return g;
-        const o = n.transform(r.value, i);
+        if (!F(r))
+          return m;
+        const o = i.transform(r.value, n);
         if (o instanceof Promise)
           throw new Error("Asynchronous transform encountered during synchronous parse operation. Use .parseAsync instead.");
         return { status: t.value, value: o };
       } else
-        return this._def.schema._parseAsync({ data: s.data, path: s.path, parent: s }).then((r) => q(r) ? Promise.resolve(n.transform(r.value, i)).then((o) => ({
+        return this._def.schema._parseAsync({ data: s.data, path: s.path, parent: s }).then((r) => F(r) ? Promise.resolve(i.transform(r.value, n)).then((o) => ({
           status: t.value,
           value: o
-        })) : g);
-    x.assertNever(n);
+        })) : m);
+    b.assertNever(i);
   }
 }
-X.create = (a, e, t) => new X({
+G.create = (a, e, t) => new G({
   schema: a,
-  typeName: f.ZodEffects,
+  typeName: g.ZodEffects,
   effect: e,
   ...y(t)
 });
-X.createWithPreprocess = (a, e, t) => new X({
+G.createWithPreprocess = (a, e, t) => new G({
   schema: e,
   effect: { type: "preprocess", transform: a },
-  typeName: f.ZodEffects,
+  typeName: g.ZodEffects,
   ...y(t)
 });
-class Z extends b {
+class L extends x {
   _parse(e) {
-    return this._getType(e) === l.undefined ? C(void 0) : this._def.innerType._parse(e);
+    return this._getType(e) === l.undefined ? R(void 0) : this._def.innerType._parse(e);
   }
   unwrap() {
     return this._def.innerType;
   }
 }
-Z.create = (a, e) => new Z({
+L.create = (a, e) => new L({
   innerType: a,
-  typeName: f.ZodOptional,
+  typeName: g.ZodOptional,
   ...y(e)
 });
-class G extends b {
+class J extends x {
   _parse(e) {
-    return this._getType(e) === l.null ? C(null) : this._def.innerType._parse(e);
+    return this._getType(e) === l.null ? R(null) : this._def.innerType._parse(e);
   }
   unwrap() {
     return this._def.innerType;
   }
 }
-G.create = (a, e) => new G({
+J.create = (a, e) => new J({
   innerType: a,
-  typeName: f.ZodNullable,
+  typeName: g.ZodNullable,
   ...y(e)
 });
-class me extends b {
+class ge extends x {
   _parse(e) {
     const { ctx: t } = this._processInputParams(e);
     let s = t.data;
@@ -2500,13 +2500,13 @@ class me extends b {
     return this._def.innerType;
   }
 }
-me.create = (a, e) => new me({
+ge.create = (a, e) => new ge({
   innerType: a,
-  typeName: f.ZodDefault,
+  typeName: g.ZodDefault,
   defaultValue: typeof e.default == "function" ? e.default : () => e.default,
   ...y(e)
 });
-class ge extends b {
+class me extends x {
   _parse(e) {
     const { ctx: t } = this._processInputParams(e), s = {
       ...t,
@@ -2514,26 +2514,26 @@ class ge extends b {
         ...t.common,
         issues: []
       }
-    }, n = this._def.innerType._parse({
+    }, i = this._def.innerType._parse({
       data: s.data,
       path: s.path,
       parent: {
         ...s
       }
     });
-    return se(n) ? n.then((i) => ({
+    return ae(i) ? i.then((n) => ({
       status: "valid",
-      value: i.status === "valid" ? i.value : this._def.catchValue({
+      value: n.status === "valid" ? n.value : this._def.catchValue({
         get error() {
-          return new N(s.common.issues);
+          return new Z(s.common.issues);
         },
         input: s.data
       })
     })) : {
       status: "valid",
-      value: n.status === "valid" ? n.value : this._def.catchValue({
+      value: i.status === "valid" ? i.value : this._def.catchValue({
         get error() {
-          return new N(s.common.issues);
+          return new Z(s.common.issues);
         },
         input: s.data
       })
@@ -2543,13 +2543,13 @@ class ge extends b {
     return this._def.innerType;
   }
 }
-ge.create = (a, e) => new ge({
+me.create = (a, e) => new me({
   innerType: a,
-  typeName: f.ZodCatch,
+  typeName: g.ZodCatch,
   catchValue: typeof e.catch == "function" ? e.catch : () => e.catch,
   ...y(e)
 });
-class Oe extends b {
+class je extends x {
   _parse(e) {
     if (this._getType(e) !== l.nan) {
       const s = this._getOrReturnCtx(e);
@@ -2557,16 +2557,16 @@ class Oe extends b {
         code: d.invalid_type,
         expected: l.nan,
         received: s.parsedType
-      }), g;
+      }), m;
     }
     return { status: "valid", value: e.data };
   }
 }
-Oe.create = (a) => new Oe({
-  typeName: f.ZodNaN,
+je.create = (a) => new je({
+  typeName: g.ZodNaN,
   ...y(a)
 });
-class mt extends b {
+class _t extends x {
   _parse(e) {
     const { ctx: t } = this._processInputParams(e), s = t.data;
     return this._def.type._parse({
@@ -2579,33 +2579,33 @@ class mt extends b {
     return this._def.type;
   }
 }
-class ve extends b {
+class ve extends x {
   _parse(e) {
     const { status: t, ctx: s } = this._processInputParams(e);
     if (s.common.async)
       return (async () => {
-        const i = await this._def.in._parseAsync({
+        const n = await this._def.in._parseAsync({
           data: s.data,
           path: s.path,
           parent: s
         });
-        return i.status === "aborted" ? g : i.status === "dirty" ? (t.dirty(), K(i.value)) : this._def.out._parseAsync({
-          data: i.value,
+        return n.status === "aborted" ? m : n.status === "dirty" ? (t.dirty(), Y(n.value)) : this._def.out._parseAsync({
+          data: n.value,
           path: s.path,
           parent: s
         });
       })();
     {
-      const n = this._def.in._parseSync({
+      const i = this._def.in._parseSync({
         data: s.data,
         path: s.path,
         parent: s
       });
-      return n.status === "aborted" ? g : n.status === "dirty" ? (t.dirty(), {
+      return i.status === "aborted" ? m : i.status === "dirty" ? (t.dirty(), {
         status: "dirty",
-        value: n.value
+        value: i.value
       }) : this._def.out._parseSync({
-        data: n.value,
+        data: i.value,
         path: s.path,
         parent: s
       });
@@ -2615,14 +2615,14 @@ class ve extends b {
     return new ve({
       in: e,
       out: t,
-      typeName: f.ZodPipeline
+      typeName: g.ZodPipeline
     });
   }
 }
-class ye extends b {
+class ye extends x {
   _parse(e) {
-    const t = this._def.innerType._parse(e), s = (n) => (q(n) && (n.value = Object.freeze(n.value)), n);
-    return se(t) ? t.then((n) => s(n)) : s(t);
+    const t = this._def.innerType._parse(e), s = (i) => (F(i) && (i.value = Object.freeze(i.value)), i);
+    return ae(t) ? t.then((i) => s(i)) : s(t);
   }
   unwrap() {
     return this._def.innerType;
@@ -2630,23 +2630,23 @@ class ye extends b {
 }
 ye.create = (a, e) => new ye({
   innerType: a,
-  typeName: f.ZodReadonly,
+  typeName: g.ZodReadonly,
   ...y(e)
 });
-var f;
+var g;
 (function(a) {
   a.ZodString = "ZodString", a.ZodNumber = "ZodNumber", a.ZodNaN = "ZodNaN", a.ZodBigInt = "ZodBigInt", a.ZodBoolean = "ZodBoolean", a.ZodDate = "ZodDate", a.ZodSymbol = "ZodSymbol", a.ZodUndefined = "ZodUndefined", a.ZodNull = "ZodNull", a.ZodAny = "ZodAny", a.ZodUnknown = "ZodUnknown", a.ZodNever = "ZodNever", a.ZodVoid = "ZodVoid", a.ZodArray = "ZodArray", a.ZodObject = "ZodObject", a.ZodUnion = "ZodUnion", a.ZodDiscriminatedUnion = "ZodDiscriminatedUnion", a.ZodIntersection = "ZodIntersection", a.ZodTuple = "ZodTuple", a.ZodRecord = "ZodRecord", a.ZodMap = "ZodMap", a.ZodSet = "ZodSet", a.ZodFunction = "ZodFunction", a.ZodLazy = "ZodLazy", a.ZodLiteral = "ZodLiteral", a.ZodEnum = "ZodEnum", a.ZodEffects = "ZodEffects", a.ZodNativeEnum = "ZodNativeEnum", a.ZodOptional = "ZodOptional", a.ZodNullable = "ZodNullable", a.ZodDefault = "ZodDefault", a.ZodCatch = "ZodCatch", a.ZodPromise = "ZodPromise", a.ZodBranded = "ZodBranded", a.ZodPipeline = "ZodPipeline", a.ZodReadonly = "ZodReadonly";
-})(f || (f = {}));
-const m = O.create, P = W.create, D = ue.create, I = he.create;
-z.create;
-const R = A.create, T = _.create, Pe = ie.create;
-ne.create;
+})(g || (g = {}));
+const f = N.create, j = X.create, M = ue.create, O = he.create;
 B.create;
-const U = re.create, ze = fe.create, H = F.create;
-oe.create;
-Z.create;
-G.create;
-const be = H(["GET", "POST", "PUT", "PATCH", "DELETE"]), Le = H(["confirm", "block", "limit", "require", "role"]), gt = H([
+const C = $.create, T = k.create, Le = ie.create;
+re.create;
+V.create;
+const W = oe.create, Be = fe.create, U = H.create;
+de.create;
+L.create;
+J.create;
+const xe = U(["GET", "POST", "PUT", "PATCH", "DELETE"]), De = U(["confirm", "block", "limit", "require", "role"]), kt = U([
   "eq",
   "neq",
   "gt",
@@ -2656,157 +2656,162 @@ const be = H(["GET", "POST", "PUT", "PATCH", "DELETE"]), Le = H(["confirm", "blo
   "in",
   "not_in",
   "contains"
-]), yt = H(["voice", "docs", "compile"]), De = T({
-  id: m().uuid().optional(),
-  app_id: m().uuid().optional(),
-  skill_name: m(),
-  kind: Le,
-  field: m().nullable().optional(),
-  op: gt.nullable().optional(),
-  value: I().optional(),
-  message: m(),
-  spoken: m().nullable().optional(),
-  source: yt.default("voice"),
-  created_at: m().optional()
-}), vt = T({
-  type: m(),
-  required: D().default(!1),
-  enum: R(m()).optional(),
-  description: m().optional(),
-  default: I().optional()
-}), Be = T({
-  id: m().uuid().optional(),
-  app_id: m().uuid().optional(),
-  name: m().regex(/^[a-z0-9_]+$/i, "Skill name must be alphanumeric with underscores"),
-  version: P().int().default(1),
-  title: m(),
-  description: m().optional(),
-  method: be,
-  path: m(),
-  query_params: R(m()).default([]),
-  inputs: U(vt).default({}),
-  constants: U(I()).default({}),
-  outputs: U(I()).default({}),
-  depends_on: R(m()).default([]),
-  is_write: D().default(!1),
-  verify_with: m().nullable().optional(),
-  source_recording: m().uuid().nullable().optional(),
-  narration: m().nullable().optional(),
-  status: H(["active", "drifted", "disabled", "at_risk"]).default("active")
+]), wt = U(["voice", "docs", "compile"]), Me = T({
+  id: f().uuid().optional(),
+  app_id: f().uuid().optional(),
+  skill_name: f(),
+  kind: De,
+  field: f().nullable().optional(),
+  op: kt.nullable().optional(),
+  value: O().optional(),
+  message: f(),
+  spoken: f().nullable().optional(),
+  source: wt.default("voice"),
+  created_at: f().optional()
+}), Tt = T({
+  type: f(),
+  required: M().default(!1),
+  enum: C(f()).optional(),
+  description: f().optional(),
+  default: O().optional()
+}), Ve = T({
+  id: f().uuid().optional(),
+  app_id: f().uuid().optional(),
+  name: f().regex(/^[a-z0-9_]+$/i, "Skill name must be alphanumeric with underscores"),
+  version: j().int().default(1),
+  title: f(),
+  description: f().optional(),
+  method: xe,
+  path: f(),
+  query_params: C(f()).default([]),
+  inputs: W(Tt).default({}),
+  constants: W(O()).default({}),
+  outputs: W(O()).default({}),
+  depends_on: C(f()).default([]),
+  is_write: M().default(!1),
+  verify_with: f().nullable().optional(),
+  source_recording: f().uuid().nullable().optional(),
+  narration: f().nullable().optional(),
+  narration_metadata: T({
+    source: U(["voice", "typed"]),
+    words: j(),
+    created_at: f().optional()
+  }).nullable().optional(),
+  status: U(["active", "drifted", "disabled", "at_risk"]).default("active")
 });
 T({
-  method: be,
-  path: m(),
-  query: U(m()).optional(),
-  requestBody: I().optional(),
-  status: P().int(),
-  responseBody: I().optional(),
-  ts: P()
+  method: xe,
+  path: f(),
+  query: W(f()).optional(),
+  requestBody: O().optional(),
+  status: j().int(),
+  responseBody: O().optional(),
+  ts: j()
 });
-const bt = T({
-  from_event: P().int(),
-  from_path: m(),
-  to_event: P().int(),
-  to_field: m(),
-  value: Pe([m(), P()])
-});
-T({
-  skills: R(Be),
-  suggested_policies: R(De).default([])
+const St = T({
+  from_event: j().int(),
+  from_path: f(),
+  to_event: j().int(),
+  to_field: f(),
+  value: Le([f(), j()])
 });
 T({
-  skills: R(Be),
-  suggested_policies: R(De).default([]),
-  tracer_edges: R(bt).default([])
-});
-const xt = T({
-  idx: P().int(),
-  skill_name: m(),
-  description: m(),
-  args: U(I()).default({})
-}), Me = T({
-  steps: R(xt),
-  summary: m()
-}), _t = T({
-  role: H(["system", "user", "assistant", "tool"]),
-  content: m().default(""),
-  tool_call_id: m().optional(),
-  name: m().optional()
-}), kt = T({
-  call_id: m(),
-  skill_name: m(),
-  status: P().int(),
-  response: I().optional()
+  skills: C(Ve),
+  suggested_policies: C(Me).default([])
 });
 T({
-  app_key: m(),
-  messages: R(_t),
-  pending_result: kt.optional()
+  skills: C(Ve),
+  suggested_policies: C(Me).default([]),
+  tracer_edges: C(St).default([])
 });
-const wt = T({
-  type: ze("tool_call"),
-  call_id: m(),
-  skill: m(),
-  method: be.optional(),
-  path: m().optional(),
-  args: U(I()).default({}),
+const Ct = T({
+  idx: j().int(),
+  skill_name: f(),
+  description: f(),
+  args: W(O()).default({})
+}), Ue = T({
+  steps: C(Ct),
+  summary: f()
+}), Rt = T({
+  role: U(["system", "user", "assistant", "tool"]),
+  content: f().default(""),
+  tool_call_id: f().optional(),
+  name: f().optional()
+}), Et = T({
+  call_id: f(),
+  skill_name: f(),
+  status: j().int(),
+  response: O().optional()
+});
+T({
+  app_key: f(),
+  messages: C(Rt),
+  pending_result: Et.optional()
+});
+const At = T({
+  type: Be("tool_call"),
+  call_id: f(),
+  skill: f(),
+  method: xe.optional(),
+  path: f().optional(),
+  args: W(O()).default({}),
   check: T({
-    allowed: D(),
-    needsConfirm: D(),
-    violations: R(T({
-      policyId: m(),
-      message: m(),
-      kind: Le,
-      field: m().nullable().optional()
+    allowed: M(),
+    needsConfirm: M(),
+    violations: C(T({
+      policyId: f(),
+      message: f(),
+      kind: De,
+      field: f().nullable().optional()
     }))
   }),
-  plan: Me.optional(),
-  verified: D().optional(),
-  verification_note: m().optional(),
-  blocked: D().optional(),
-  message: m().optional()
-}), Tt = T({
-  type: ze("message"),
-  text: m(),
-  plan: Me.optional(),
-  sources: R(I()).optional(),
-  verified: D().optional(),
-  verification_note: m().optional()
+  plan: Ue.optional(),
+  verified: M().optional(),
+  verification_note: f().optional(),
+  blocked: M().optional(),
+  message: f().optional()
+}), $t = T({
+  type: Be("message"),
+  text: f(),
+  plan: Ue.optional(),
+  sources: C(O()).optional(),
+  verified: M().optional(),
+  verification_note: f().optional()
 });
-Pe([
-  wt,
-  Tt
+Le([
+  At,
+  $t
 ]);
-const St = /token|secret|password|authorization|cookie|otp|card|aadhaar|pan/i, Rt = /[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/g, Ct = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}/g, Et = 8192;
-function Y(a) {
+const It = /token|secret|password|authorization|cookie|otp|card|aadhaar|pan/i, Ot = /[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/g, Nt = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}/g, jt = 8192;
+function Q(a) {
   if (a == null)
     return a;
   if (typeof a == "string") {
-    let e = a.replace(Rt, (t) => {
-      const [s, n] = t.split("@");
-      return `${s.length > 2 ? `${s[0]}***${s[s.length - 1]}` : `${s[0]}***`}@${n}`;
+    let e = a.replace(Ot, (t) => {
+      const [s, i] = t.split("@");
+      return `${s.length > 2 ? `${s[0]}***${s[s.length - 1]}` : `${s[0]}***`}@${i}`;
     });
-    return e = e.replace(Ct, (t) => {
+    return e = e.replace(Nt, (t) => {
       const s = t.replace(/\D/g, "");
       return s.length >= 7 ? `+XX-XXXX-${s.slice(-4)}` : t;
     }), e;
   }
   if (Array.isArray(a))
-    return a.map((e) => Y(e));
+    return a.map((e) => Q(e));
   if (typeof a == "object") {
     const e = {};
     for (const [t, s] of Object.entries(a))
-      St.test(t) ? e[t] = "[REDACTED]" : e[t] = Y(s);
+      It.test(t) ? e[t] = "[REDACTED]" : e[t] = Q(s);
     return e;
   }
   return a;
 }
-function At(a) {
-  let e = Y(a.responseBody);
+function Zt(a) {
+  let e = Q(a.responseBody);
   if (e != null)
     try {
       const t = JSON.stringify(e);
-      t.length > Et && (e = {
+      t.length > jt && (e = {
         _truncated: !0,
         sample: typeof e == "object" && e !== null ? Array.isArray(e) ? e.slice(0, 3) : Object.fromEntries(Object.entries(e).slice(0, 5)) : "[Large payload truncated]",
         total_bytes: t.length
@@ -2816,17 +2821,17 @@ function At(a) {
   return {
     method: a.method,
     path: a.path,
-    query: a.query ? Y(a.query) : void 0,
-    requestBody: a.requestBody ? Y(a.requestBody) : void 0,
+    query: a.query ? Q(a.query) : void 0,
+    requestBody: a.requestBody ? Q(a.requestBody) : void 0,
     status: a.status,
     responseBody: e,
     ts: a.ts || Date.now()
   };
 }
-function $t(a) {
-  return a.map(At);
+function zt(a) {
+  return a.map(Zt);
 }
-class It {
+class Pt {
   constructor() {
     w(this, "config", {
       publicKey: "pk_demo_dehix",
@@ -2841,6 +2846,7 @@ class It {
     w(this, "isListening", !1);
     w(this, "speechRecognition", null);
     w(this, "narrationText", "");
+    w(this, "narrationSource", "typed");
     w(this, "recordingTitle", "");
     // Ask Agent State
     w(this, "chatItems", []);
@@ -2850,6 +2856,10 @@ class It {
     w(this, "currentRunId", null);
     w(this, "stats", { skillsCount: 6, rulesCount: 3 });
     this.autoInit();
+  }
+  getNarrationWordCount() {
+    const e = this.narrationText.trim();
+    return e ? e.split(/\s+/).filter(Boolean).length : 0;
   }
   autoInit() {
     if (typeof window > "u") return;
@@ -2878,27 +2888,27 @@ class It {
   setupInterceptors() {
     if (typeof window > "u") return;
     const e = this, t = window.fetch;
-    window.fetch = async function(...i) {
+    window.fetch = async function(...n) {
       var o, u;
-      const r = await t.apply(this, i);
+      const r = await t.apply(this, n);
       if (e.isRecording)
         try {
-          const h = typeof i[0] == "string" ? i[0] : i[0].url, v = new URL(h, window.location.origin);
+          const h = typeof n[0] == "string" ? n[0] : n[0].url, v = new URL(h, window.location.origin);
           if (v.origin === window.location.origin && v.pathname.startsWith(e.config.apiPrefix || "/api/")) {
-            const E = r.clone();
-            let L = null;
+            const A = r.clone();
+            let D = null;
             try {
-              L = await E.json();
+              D = await A.json();
             } catch {
             }
-            const te = (o = i[1]) == null ? void 0 : o.body, k = e.safeParseBody(te);
+            const se = (o = n[1]) == null ? void 0 : o.body, _ = e.safeParseBody(se);
             e.addCapturedEvent({
-              method: (((u = i[1]) == null ? void 0 : u.method) || "GET").toUpperCase(),
+              method: (((u = n[1]) == null ? void 0 : u.method) || "GET").toUpperCase(),
               path: v.pathname,
               query: Object.fromEntries(v.searchParams.entries()),
-              requestBody: k,
+              requestBody: _,
               status: r.status,
-              responseBody: L,
+              responseBody: D,
               ts: Date.now()
             });
           }
@@ -2907,10 +2917,10 @@ class It {
         }
       return r;
     };
-    const s = XMLHttpRequest.prototype.open, n = XMLHttpRequest.prototype.send;
-    XMLHttpRequest.prototype.open = function(i, r, ...o) {
-      return this._saydoMethod = i, this._saydoUrl = r.toString(), s.apply(this, [i, r, ...o]);
-    }, XMLHttpRequest.prototype.send = function(i) {
+    const s = XMLHttpRequest.prototype.open, i = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.open = function(n, r, ...o) {
+      return this._saydoMethod = n, this._saydoUrl = r.toString(), s.apply(this, [n, r, ...o]);
+    }, XMLHttpRequest.prototype.send = function(n) {
       return e.isRecording && this._saydoUrl && this.addEventListener("load", () => {
         try {
           const r = new URL(this._saydoUrl, window.location.origin);
@@ -2924,7 +2934,7 @@ class It {
               method: (this._saydoMethod || "GET").toUpperCase(),
               path: r.pathname,
               query: Object.fromEntries(r.searchParams.entries()),
-              requestBody: e.safeParseBody(i),
+              requestBody: e.safeParseBody(n),
               status: this.status,
               responseBody: o,
               ts: Date.now()
@@ -2933,7 +2943,7 @@ class It {
         } catch (r) {
           console.warn("[SayDo] XHR interceptor error:", r);
         }
-      }), n.apply(this, [i]);
+      }), i.apply(this, [n]);
     };
   }
   addCapturedEvent(e) {
@@ -2955,9 +2965,9 @@ class It {
     const e = window.SpeechRecognition || window.webkitSpeechRecognition;
     e && (this.speechRecognition = new e(), this.speechRecognition.continuous = !0, this.speechRecognition.interimResults = !0, this.speechRecognition.lang = "en-IN", this.speechRecognition.onresult = (t) => {
       let s = "";
-      for (let n = t.resultIndex; n < t.results.length; n++)
-        s += t.results[n][0].transcript;
-      this.activeTab === "teach" ? this.narrationText = (this.narrationText + " " + s).trim() : this.chatInputText = (this.chatInputText + " " + s).trim(), this.render();
+      for (let i = t.resultIndex; i < t.results.length; i++)
+        s += t.results[i][0].transcript;
+      this.activeTab === "teach" ? (this.narrationSource = "voice", this.narrationText = (this.narrationText + " " + s).trim()) : this.chatInputText = (this.chatInputText + " " + s).trim(), this.render();
     }, this.speechRecognition.onerror = () => {
       this.isListening = !1, this.render();
     }, this.speechRecognition.onend = () => {
@@ -3006,42 +3016,42 @@ class It {
         pending_result: e,
         run_id: this.currentRunId,
         plan: this.activePlan
-      }, n = await fetch(`${this.config.apiUrl}/v1/chat`, {
+      }, i = await fetch(`${this.config.apiUrl}/v1/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(s)
-      }), i = await n.json();
-      if (!n.ok)
-        throw new Error(i.error || "Agent request failed");
-      if (i.run_id && (this.currentRunId = i.run_id), i.plan && (this.activePlan = i.plan), i.type === "tool_call") {
+      }), n = await i.json();
+      if (!i.ok)
+        throw new Error(n.error || "Agent request failed");
+      if (n.run_id && (this.currentRunId = n.run_id), n.plan && (this.activePlan = n.plan), n.type === "tool_call") {
         const r = {
-          id: i.call_id || `call-${Date.now()}`,
+          id: n.call_id || `call-${Date.now()}`,
           role: "tool",
           toolCall: {
-            call_id: i.call_id,
-            skill: i.skill,
-            method: i.method,
-            path: i.path,
-            args: i.args,
-            check: i.check,
-            blocked: i.blocked,
-            needsConfirm: i.needsConfirm,
-            message: i.message,
-            is_verification: i.is_verification,
-            original_write: i.original_write
+            call_id: n.call_id,
+            skill: n.skill,
+            method: n.method,
+            path: n.path,
+            args: n.args,
+            check: n.check,
+            blocked: n.blocked,
+            needsConfirm: n.needsConfirm,
+            message: n.message,
+            is_verification: n.is_verification,
+            original_write: n.original_write
           },
-          status: i.blocked ? "blocked" : "pending",
-          verified: i.verified,
-          verificationNote: i.verification_note
+          status: n.blocked ? "blocked" : "pending",
+          verified: n.verified,
+          verificationNote: n.verification_note
         };
-        this.chatItems.push(r), this.render(), !i.blocked && !i.needsConfirm ? await this.executeToolCall(r) : (this.isAgentBusy = !1, this.render());
-      } else i.type === "message" && (this.chatItems.push({
+        this.chatItems.push(r), this.render(), !n.blocked && !n.needsConfirm ? await this.executeToolCall(r) : (this.isAgentBusy = !1, this.render());
+      } else n.type === "message" && (this.chatItems.push({
         id: `msg-${Date.now()}`,
         role: "assistant",
-        text: i.text,
-        sources: i.sources,
-        verified: i.verified,
-        verificationNote: i.verification_note
+        text: n.text,
+        sources: n.sources,
+        verified: n.verified,
+        verificationNote: n.verification_note
       }), this.activePlan && this.activePlan.steps.forEach((r) => r.completed = !0), this.isAgentBusy = !1, this.render());
     } catch (t) {
       this.chatItems.push({
@@ -3056,15 +3066,15 @@ class It {
     if (!e.toolCall) return;
     e.status = "running", this.isAgentBusy = !0, this.render();
     const t = e.toolCall, s = (t.method || "GET").toUpperCase();
-    let n = t.path || "/";
+    let i = t.path || "/";
     if (s === "GET" && t.args && Object.keys(t.args).length > 0) {
-      const i = new URLSearchParams();
+      const n = new URLSearchParams();
       for (const [r, o] of Object.entries(t.args))
-        o != null && o !== "" && i.append(r, String(o));
-      n = `${n}?${i.toString()}`;
+        o != null && o !== "" && n.append(r, String(o));
+      i = `${i}?${n.toString()}`;
     }
     try {
-      const i = await window.fetch(n, {
+      const n = await window.fetch(i, {
         method: s,
         headers: {
           "Content-Type": "application/json"
@@ -3074,9 +3084,9 @@ class It {
       });
       let r = null;
       try {
-        r = await i.json();
+        r = await n.json();
       } catch {
-        r = { status: i.status };
+        r = { status: n.status };
       }
       if (e.status = "completed", this.activePlan) {
         const o = this.activePlan.steps.find((u) => u.skill_name === t.skill);
@@ -3089,17 +3099,17 @@ class It {
       ), await this.callChatApi({
         call_id: t.call_id,
         skill_name: t.skill,
-        status: i.status,
+        status: n.status,
         response: r,
         args: t.args,
         is_verification: t.is_verification,
         original_write: t.original_write
       });
-    } catch (i) {
+    } catch (n) {
       e.status = "cancelled", this.chatItems.push({
         id: `err-${Date.now()}`,
         role: "assistant",
-        text: `Execution failed: ${i.message}`
+        text: `Execution failed: ${n.message}`
       }), this.isAgentBusy = !1, this.render();
     }
   }
@@ -3659,24 +3669,41 @@ class It {
             </div>
 
             <div>
-              <div class="saydo-label" style="display: flex; align-items: center; justify-content: space-between;">
-                <span>Tell Narration</span>
+              <div class="saydo-label" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-weight: 600; color: #f1f5f9;">Spoken Task Narration</span>
                 <span class="saydo-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.35); font-size: 9px; font-weight: 600;">
-                  🎙️ Powered by Wispr Flow
+                  🎙️ Works with Wispr Flow
                 </span>
               </div>
+
+              <!-- Wispr Flow Hint Chip & Fallback -->
+              <div style="font-size: 11px; color: #c084fc; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; background: rgba(168, 85, 247, 0.1); padding: 6px 10px; border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 8px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span>✨</span>
+                  <span style="font-weight: 500;">Hold your Wispr hotkey and talk</span>
+                </div>
+                <button id="btn-mic-teach" style="background: ${this.isListening ? "#ef4444" : "rgba(255, 255, 255, 0.08)"}; border: 1px solid ${this.isListening ? "#f87171" : "rgba(255, 255, 255, 0.15)"}; color: ${this.isListening ? "#fff" : "#cbd5e1"}; padding: 2px 7px; border-radius: 6px; font-size: 10px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.15s ease;" title="Browser Web Speech fallback">
+                  <span>${this.isListening ? "🛑 Stop" : "🎙️ Mic fallback"}</span>
+                </button>
+              </div>
+
               <div style="position: relative;">
                 <textarea 
                   class="saydo-textarea" 
                   id="textarea-narration" 
-                  rows="3" 
-                  placeholder="Speak naturally with Wispr Flow while clicking (e.g. 'I am creating Website Revamp with 2 lakh budget...')..."
+                  rows="4" 
+                  style="min-height: 85px; font-size: 12px; line-height: 1.5; resize: vertical;"
+                  placeholder="Hold your Wispr key and explain this task like you'd explain it to a new teammate…"
                 >${this.narrationText}</textarea>
-                <button class="saydo-icon-btn" id="btn-mic-teach" style="position: absolute; right: 8px; bottom: 8px; background: ${this.isListening ? "#ef4444" : "#7c3aed"}; color: white;" title="Dictate with Wispr Flow">
-                  ${this.isListening ? "🛑" : "🎙️"}
-                </button>
               </div>
-              ${this.isListening ? '<div style="font-size: 10px; color: #c084fc; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;"><span class="saydo-indicator" style="background: #c084fc; box-shadow: 0 0 8px #c084fc;"></span> Wispr Flow listening... Speak aloud at your normal pace.</div>' : ""}
+
+              <div id="narration-word-count" style="font-size: 10px; color: #94a3b8; margin-top: 5px; display: flex; align-items: center; justify-content: space-between; padding: 0 2px;">
+                <span>${this.getNarrationWordCount()} words</span>
+                <span style="color: ${this.narrationSource === "voice" ? "#c084fc" : "#64748b"}; font-weight: 500;">
+                  ${this.narrationSource === "voice" ? "🎙️ likely dictated" : "⌨️ typed"}
+                </span>
+              </div>
+              ${this.isListening ? '<div style="font-size: 10px; color: #c084fc; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;"><span class="saydo-indicator" style="background: #c084fc; box-shadow: 0 0 8px #c084fc;"></span> Web Speech API active (en-IN)... Speak clearly.</div>' : ""}
             </div>
 
             <div>
@@ -3752,7 +3779,7 @@ class It {
                         </div>
                         <div style="font-size: 11px; color: #fca5a5;">${s.message || "Blocked by security policy."}</div>
                         <table class="saydo-args-table">
-                          ${Object.entries(s.args || {}).map(([n, i]) => `<tr><td style="color:#94a3b8;">${n}</td><td>${i}</td></tr>`).join("")}
+                          ${Object.entries(s.args || {}).map(([i, n]) => `<tr><td style="color:#94a3b8;">${i}</td><td>${n}</td></tr>`).join("")}
                         </table>
                       </div>
                     `;
@@ -3766,11 +3793,11 @@ class It {
                         <div style="font-size: 12px; font-weight: 600; color: #f8fafc;">Action: ${s.skill}</div>
                         <table class="saydo-args-table">
                           ${Object.entries(s.args || {}).map(
-            ([n, i]) => `
+            ([i, n]) => `
                             <tr>
-                              <td style="color: #94a3b8; width: 35%;">${n}</td>
+                              <td style="color: #94a3b8; width: 35%;">${i}</td>
                               <td style="color: #f8fafc; font-weight: 500;">
-                                ${n === "budget" ? "₹" + Number(i).toLocaleString("en-IN") : i}
+                                ${i === "budget" ? "₹" + Number(n).toLocaleString("en-IN") : n}
                               </td>
                             </tr>
                           `
@@ -3861,75 +3888,95 @@ class It {
     `, this.attachEventListeners();
   }
   attachEventListeners() {
-    var s, n, i, r, o, u, h, v, E, L, te;
+    var i, n, r, o, u, h, v, A, D, se;
     if (!this.shadowRoot) return;
-    (s = this.shadowRoot.getElementById("saydo-launcher")) == null || s.addEventListener("click", () => {
+    (i = this.shadowRoot.getElementById("saydo-launcher")) == null || i.addEventListener("click", () => {
       this.isOpen = !this.isOpen, this.render();
     }), (n = this.shadowRoot.getElementById("saydo-close")) == null || n.addEventListener("click", () => {
       this.isOpen = !1, this.render();
-    }), (i = this.shadowRoot.getElementById("tab-ask")) == null || i.addEventListener("click", () => {
+    }), (r = this.shadowRoot.getElementById("tab-ask")) == null || r.addEventListener("click", () => {
       this.activeTab = "ask", this.render();
-    }), (r = this.shadowRoot.getElementById("tab-teach")) == null || r.addEventListener("click", () => {
+    }), (o = this.shadowRoot.getElementById("tab-teach")) == null || o.addEventListener("click", () => {
       this.activeTab = "teach", this.render();
-    }), (o = this.shadowRoot.getElementById("btn-toggle-rec")) == null || o.addEventListener("click", () => {
-      this.isRecording ? this.isRecording = !1 : (this.isRecording = !0, this.recordedEvents = []), this.render();
-    }), (u = this.shadowRoot.getElementById("btn-mic-teach")) == null || u.addEventListener("click", () => this.toggleSpeech()), (h = this.shadowRoot.getElementById("btn-mic-ask")) == null || h.addEventListener("click", () => this.toggleSpeech()), (v = this.shadowRoot.getElementById("input-title")) == null || v.addEventListener("input", (k) => {
-      this.recordingTitle = k.target.value;
-    }), (E = this.shadowRoot.getElementById("textarea-narration")) == null || E.addEventListener("input", (k) => {
-      this.narrationText = k.target.value;
-    }), (L = this.shadowRoot.getElementById("btn-save-recording")) == null || L.addEventListener("click", () => this.saveRecording());
-    const e = this.shadowRoot.getElementById("input-chat");
-    e == null || e.addEventListener("input", (k) => {
-      this.chatInputText = k.target.value;
-    }), e == null || e.addEventListener("keydown", (k) => {
-      k.key === "Enter" && this.submitUserPrompt(this.chatInputText);
-    }), (te = this.shadowRoot.getElementById("btn-send-chat")) == null || te.addEventListener("click", () => {
+    }), (u = this.shadowRoot.getElementById("btn-toggle-rec")) == null || u.addEventListener("click", () => {
+      this.isRecording ? (this.isRecording = !1, this.render()) : (this.isRecording = !0, this.recordedEvents = [], this.render(), setTimeout(() => {
+        var E;
+        const _ = (E = this.shadowRoot) == null ? void 0 : E.getElementById("textarea-narration");
+        _ == null || _.focus();
+      }, 50));
+    }), (h = this.shadowRoot.getElementById("btn-mic-teach")) == null || h.addEventListener("click", () => {
+      this.narrationSource = "voice", this.toggleSpeech();
+    }), (v = this.shadowRoot.getElementById("btn-mic-ask")) == null || v.addEventListener("click", () => this.toggleSpeech()), (A = this.shadowRoot.getElementById("input-title")) == null || A.addEventListener("input", (_) => {
+      this.recordingTitle = _.target.value;
+    });
+    const e = this.shadowRoot.getElementById("textarea-narration");
+    e == null || e.addEventListener("input", (_) => {
+      var _e;
+      const E = this.narrationText.length, z = _.target.value, K = z.length - E, qe = _;
+      (K > 15 || qe.inputType === "insertFromPaste") && (this.narrationSource = "voice"), this.narrationText = z;
+      const be = (_e = this.shadowRoot) == null ? void 0 : _e.getElementById("narration-word-count");
+      if (be) {
+        const We = this.getNarrationWordCount(), Fe = this.narrationSource === "voice" ? "🎙️ likely dictated" : "⌨️ typed", Xe = this.narrationSource === "voice" ? "#c084fc" : "#64748b";
+        be.innerHTML = `<span>${We} words</span><span style="color: ${Xe}; font-weight: 500;">${Fe}</span>`;
+      }
+    }), (D = this.shadowRoot.getElementById("btn-save-recording")) == null || D.addEventListener("click", () => this.saveRecording());
+    const t = this.shadowRoot.getElementById("input-chat");
+    t == null || t.addEventListener("input", (_) => {
+      this.chatInputText = _.target.value;
+    }), t == null || t.addEventListener("keydown", (_) => {
+      _.key === "Enter" && this.submitUserPrompt(this.chatInputText);
+    }), (se = this.shadowRoot.getElementById("btn-send-chat")) == null || se.addEventListener("click", () => {
       this.submitUserPrompt(this.chatInputText);
-    }), this.shadowRoot.querySelectorAll(".saydo-chip").forEach((k) => {
-      k.addEventListener("click", () => {
-        const M = k.getAttribute("data-prompt");
-        M && this.submitUserPrompt(M);
+    }), this.shadowRoot.querySelectorAll(".saydo-chip").forEach((_) => {
+      _.addEventListener("click", () => {
+        const E = _.getAttribute("data-prompt");
+        E && this.submitUserPrompt(E);
       });
-    }), this.shadowRoot.querySelectorAll('[data-action="confirm"]').forEach((k) => {
-      k.addEventListener("click", () => {
-        const M = k.getAttribute("data-id"), J = this.chatItems.find((de) => de.id === M);
-        J && this.executeToolCall(J);
+    }), this.shadowRoot.querySelectorAll('[data-action="confirm"]').forEach((_) => {
+      _.addEventListener("click", () => {
+        const E = _.getAttribute("data-id"), z = this.chatItems.find((K) => K.id === E);
+        z && this.executeToolCall(z);
       });
-    }), this.shadowRoot.querySelectorAll('[data-action="cancel"]').forEach((k) => {
-      k.addEventListener("click", () => {
-        const M = k.getAttribute("data-id"), J = this.chatItems.find((de) => de.id === M);
-        J && this.cancelToolCall(J);
+    }), this.shadowRoot.querySelectorAll('[data-action="cancel"]').forEach((_) => {
+      _.addEventListener("click", () => {
+        const E = _.getAttribute("data-id"), z = this.chatItems.find((K) => K.id === E);
+        z && this.cancelToolCall(z);
       });
     });
-    const t = this.shadowRoot.getElementById("saydo-body");
-    t && (t.scrollTop = t.scrollHeight);
+    const s = this.shadowRoot.getElementById("saydo-body");
+    s && (s.scrollTop = s.scrollHeight);
   }
   async saveRecording() {
     if (this.recordedEvents.length === 0) return;
-    const e = this.recordingTitle.trim() || `Recording ${(/* @__PURE__ */ new Date()).toLocaleTimeString()}`, t = this.narrationText.trim(), s = $t(this.recordedEvents), n = {
+    const e = this.recordingTitle.trim() || `Recording ${(/* @__PURE__ */ new Date()).toLocaleTimeString()}`, t = this.narrationText.trim(), s = zt(this.recordedEvents), i = t ? t.split(/\s+/).filter(Boolean).length : 0, n = {
       publicKey: this.config.publicKey,
       title: e,
       events: s,
-      narration: t
+      narration: t,
+      narration_metadata: {
+        source: this.narrationSource,
+        words: i,
+        created_at: (/* @__PURE__ */ new Date()).toISOString()
+      }
     };
     try {
-      const i = await fetch(`${this.config.apiUrl}/v1/recordings`, {
+      const r = await fetch(`${this.config.apiUrl}/v1/recordings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-SayDo-Public-Key": this.config.publicKey
         },
         body: JSON.stringify(n)
-      }), r = await i.json();
-      if (!i.ok) throw new Error(r.error || "Failed to save recording");
-      alert(`✅ Recording "${e}" successfully stored in SayDo! (${r.event_count} sanitized events)`), this.recordedEvents = [], this.recordingTitle = "", this.narrationText = "", this.render();
-    } catch (i) {
-      alert(`❌ Failed to save recording: ${i.message}`);
+      }), o = await r.json();
+      if (!r.ok) throw new Error(o.error || "Failed to save recording");
+      alert(`✅ Recording "${e}" successfully stored in SayDo! (${o.event_count} sanitized events)`), this.recordedEvents = [], this.recordingTitle = "", this.narrationText = "", this.narrationSource = "typed", this.render();
+    } catch (r) {
+      alert(`❌ Failed to save recording: ${r.message}`);
     }
   }
 }
-const Ot = new It();
-typeof window < "u" && (window.SayDo = Ot);
+const Lt = new Pt();
+typeof window < "u" && (window.SayDo = Lt);
 export {
-  Ot as default
+  Lt as default
 };

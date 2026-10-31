@@ -30,9 +30,12 @@ export default function PoliciesPage() {
   const [policies, setPolicies] = useState<PolicyRule[]>([]);
   const [loading, setLoading] = useState(true);
   const [spokenInput, setSpokenInput] = useState('');
+  const [ruleSource, setRuleSource] = useState<'voice' | 'typed'>('typed');
   const [isListening, setIsListening] = useState(false);
   const [parsing, setParsing] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+
+  const wordCount = spokenInput.trim() ? spokenInput.trim().split(/\s+/).filter(Boolean).length : 0;
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -74,9 +77,13 @@ export default function PoliciesPage() {
       const recognition = new SpeechRecognition();
       recognition.lang = 'en-IN';
       recognition.interimResults = false;
-      recognition.onstart = () => setIsListening(true);
+      recognition.onstart = () => {
+        setIsListening(true);
+        setRuleSource('voice');
+      };
       recognition.onresult = (e: any) => {
         const transcript = e.results[0][0].transcript;
+        setRuleSource('voice');
         setSpokenInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
       };
       recognition.onerror = () => setIsListening(false);
@@ -88,9 +95,20 @@ export default function PoliciesPage() {
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const nextVal = e.target.value;
+    const delta = nextVal.length - spokenInput.length;
+    if (delta > 15) {
+      setRuleSource('voice');
+    }
+    setSpokenInput(nextVal);
+  };
+
   const handleParseAndSave = async (ruleText?: string) => {
     const textToSubmit = ruleText || spokenInput;
     if (!textToSubmit.trim()) return;
+
+    const sourceToSend = ruleText ? 'voice' : ruleSource;
 
     setParsing(true);
     setFeedback(null);
@@ -102,7 +120,7 @@ export default function PoliciesPage() {
         body: JSON.stringify({
           publicKey: 'pk_demo_dehix',
           spoken: textToSubmit,
-          source: 'voice',
+          source: sourceToSend,
         }),
       });
 
@@ -113,6 +131,7 @@ export default function PoliciesPage() {
 
       setFeedback(`✓ Created ${data.count || 1} policy rule(s) from spoken text!`);
       setSpokenInput('');
+      setRuleSource('typed');
       fetchPolicies();
     } catch (err: any) {
       setFeedback(`Error: ${err.message}`);
@@ -254,42 +273,61 @@ export default function PoliciesPage() {
       <main className="p-8 max-w-7xl w-full mx-auto flex flex-col gap-8 flex-1">
         {/* "Speak a Rule" Hero Box */}
         <section className="p-6 rounded-2xl bg-gradient-to-r from-purple-950/20 via-[#0c101a] to-blue-950/20 border border-purple-900/30 shadow-xl flex flex-col gap-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-base font-bold text-white">Speak a Rule (Wispr / Voice Mic)</h2>
+                <h2 className="text-base font-bold text-white flex items-center gap-2">
+                  Speak a Rule
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30">
+                    🎙️ Works with Wispr Flow
+                  </span>
+                </h2>
                 <p className="text-xs text-slate-400">
                   Dictate natural language business constraints. Nemotron Fast maps them into structured code policies enforced on the server and SDK.
                 </p>
               </div>
             </div>
 
-            <button
-              onClick={handleToggleSpeech}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
-                isListening
-                  ? 'bg-rose-500 text-white border-rose-400 animate-pulse'
-                  : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
-              }`}
-            >
-              <Mic className="w-4 h-4" />
-              <span>{isListening ? 'Listening (en-IN)...' : 'Dictate Rule'}</span>
-            </button>
+            {/* Hint Chip & Fallback */}
+            <div className="flex items-center gap-2 self-start sm:self-auto bg-purple-950/40 border border-purple-800/40 px-3 py-1.5 rounded-xl text-xs text-purple-300">
+              <span className="font-medium">✨ Hold Wispr key & talk</span>
+              <span className="text-slate-500">|</span>
+              <button
+                onClick={handleToggleSpeech}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-semibold transition-all ${
+                  isListening
+                    ? 'bg-rose-500 text-white border-rose-400 animate-pulse'
+                    : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
+                }`}
+                title="Browser Web Speech API fallback (en-IN)"
+              >
+                <Mic className="w-3.5 h-3.5" />
+                <span>{isListening ? 'Listening...' : 'Mic Fallback'}</span>
+              </button>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <textarea
-              rows={2}
+              rows={3}
               value={spokenInput}
-              onChange={(e) => setSpokenInput(e.target.value)}
-              placeholder="e.g. 'Budget can never exceed 10 lakh' or 'Never invite admins through the assistant'"
-              className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+              onChange={handleInputChange}
+              onPaste={() => setRuleSource('voice')}
+              placeholder="Hold your Wispr key and explain this rule like you'd tell a team member (e.g. 'Budget can never exceed 10 lakh')..."
+              className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-500 leading-relaxed"
             />
 
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
+              <span>{wordCount} words</span>
+              <span className={ruleSource === 'voice' ? 'text-purple-300 font-semibold' : 'text-slate-500'}>
+                {ruleSource === 'voice' ? '🎙️ likely dictated' : '⌨️ typed'}
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-[11px] text-slate-500">Quick Presets:</span>
                 {presetRules.map((preset, idx) => (
