@@ -390,11 +390,14 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-4 text-slate-400">
+          <Link href="/proof" className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">
+            Proof Ledger (/proof)
+          </Link>
+          <Link href="/studio/voice" className="hover:text-white transition-colors">Taught by Voice</Link>
           <Link href="/studio" className="hover:text-white transition-colors">Studio</Link>
           <Link href="/projects" className="hover:text-white transition-colors">DEHIX-lite Demo</Link>
-          <Link href="/docs" className="hover:text-white transition-colors">Host Documentation</Link>
           <a
-            href="https://github.com/arpit2222/saydo"
+            href="https://github.com/arpit2222/saydo-wispr"
             target="_blank"
             rel="noreferrer"
             className="hover:text-white transition-colors flex items-center gap-1"

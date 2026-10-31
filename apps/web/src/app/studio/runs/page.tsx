@@ -513,7 +513,18 @@ export default function StudioRunsPage() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                      <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+                        <Link
+                          href={`/proof/${run.id}`}
+                          target="_blank"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-semibold transition-all hover:scale-[1.02] shadow-sm"
+                          title="Export shareable, read-only proof page for judges"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5 text-purple-400" />
+                          <span>Export Proof</span>
+                        </Link>
+
                         <div className="text-right">
                           <span className="text-xs font-mono font-bold text-slate-200">
                             {run.total_ms || 45} ms

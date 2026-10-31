@@ -286,8 +286,176 @@ export const mockDb = {
       },
     ],
   ]),
-  runs: new Map<string, any>(),
-  run_steps: new Map<string, any>(),
+  runs: new Map<string, any>([
+    [
+      'run-dehix-revamp-verified',
+      {
+        id: 'run-dehix-revamp-verified',
+        app_id: 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b22',
+        user_message: 'Create Website Revamp for 2 lakh and invite arpit@dehix.org as editor',
+        status: 'completed',
+        model_agent: 'nvidia/llama-3.1-nemotron-70b-instruct',
+        model_reason: 'nebius-fast',
+        total_ms: 1240,
+        channel: 'web',
+        created_at: new Date(Date.now() - 1800000).toISOString(),
+        plan: {
+          summary: 'Create Website Revamp project with 2 lakh budget and invite collaborator',
+          steps: [
+            { idx: 1, skill_name: 'create_project', description: 'Create Website Revamp project with 200000 INR budget' },
+            { idx: 2, skill_name: 'invite_member', description: 'Invite collaborator arpit@dehix.org as editor' },
+            { idx: 3, skill_name: 'get_project', description: 'Verify project creation by ID' },
+          ],
+        },
+      },
+    ],
+    [
+      'run-dehix-budget-blocked',
+      {
+        id: 'run-dehix-budget-blocked',
+        app_id: 'b1eebc99-9c0b-4ef8-bb6d-6bb9bd380b22',
+        user_message: 'Try to create a project with 15 lakh budget',
+        status: 'blocked',
+        model_agent: 'nvidia/llama-3.1-nemotron-70b-instruct',
+        model_reason: 'nebius-fast',
+        total_ms: 680,
+        channel: 'web',
+        created_at: new Date(Date.now() - 3600000).toISOString(),
+        plan: {
+          summary: 'Attempt creation of high-budget grant project',
+          steps: [
+            { idx: 1, skill_name: 'create_project', description: 'Create project with 1500000 INR budget' },
+          ],
+        },
+      },
+    ],
+  ]),
+  run_steps: new Map<string, any>([
+    [
+      'step-revamp-1',
+      {
+        id: 'step-revamp-1',
+        run_id: 'run-dehix-revamp-verified',
+        idx: 1,
+        skill_name: 'create_project',
+        args: {
+          name: 'Website Revamp',
+          budget: 200000,
+          description: 'Wispr dictation flow with milestone payments',
+        },
+        policy_result: {
+          allowed: true,
+          needsConfirm: true,
+          violations: [],
+        },
+        confirmed: true,
+        http_status: 201,
+        response: {
+          project_id: 'proj-dehix-9921',
+          name: 'Website Revamp',
+          budget: 200000,
+          status: 'active',
+          message: 'Project created successfully',
+        },
+        verified: true,
+        latency_ms: 620,
+        created_at: new Date(Date.now() - 1799000).toISOString(),
+      },
+    ],
+    [
+      'step-revamp-2',
+      {
+        id: 'step-revamp-2',
+        run_id: 'run-dehix-revamp-verified',
+        idx: 2,
+        skill_name: 'invite_member',
+        args: {
+          project_id: 'proj-dehix-9921',
+          email: 'arpit@dehix.org',
+          role: 'editor',
+        },
+        policy_result: {
+          allowed: true,
+          needsConfirm: true,
+          violations: [],
+        },
+        confirmed: true,
+        http_status: 201,
+        response: {
+          member_id: 'mem-8812',
+          email: 'arpit@dehix.org',
+          role: 'editor',
+          message: 'Collaborator invited successfully',
+        },
+        verified: true,
+        latency_ms: 380,
+        created_at: new Date(Date.now() - 1798000).toISOString(),
+      },
+    ],
+    [
+      'step-revamp-3',
+      {
+        id: 'step-revamp-3',
+        run_id: 'run-dehix-revamp-verified',
+        idx: 3,
+        skill_name: 'get_project',
+        args: {
+          id: 'proj-dehix-9921',
+        },
+        policy_result: {
+          allowed: true,
+          needsConfirm: false,
+          violations: [],
+        },
+        confirmed: true,
+        http_status: 200,
+        response: {
+          project: {
+            id: 'proj-dehix-9921',
+            name: 'Website Revamp',
+            budget: 200000,
+            status: 'active',
+          },
+        },
+        verified: true,
+        latency_ms: 240,
+        created_at: new Date(Date.now() - 1797000).toISOString(),
+      },
+    ],
+    [
+      'step-blocked-1',
+      {
+        id: 'step-blocked-1',
+        run_id: 'run-dehix-budget-blocked',
+        idx: 1,
+        skill_name: 'create_project',
+        args: {
+          name: 'High Budget Campaign',
+          budget: 1500000,
+        },
+        policy_result: {
+          allowed: false,
+          needsConfirm: false,
+          violations: [
+            {
+              policyId: 'pol-budget-limit',
+              message: 'Project budget cannot exceed ₹10,00,000 INR per platform policy.',
+              kind: 'limit',
+              field: 'budget',
+            },
+          ],
+        },
+        confirmed: false,
+        http_status: 403,
+        response: {
+          error: 'Action Blocked by Platform Policy: Project budget cannot exceed ₹10,00,000 INR per platform policy.',
+        },
+        verified: false,
+        latency_ms: 380,
+        created_at: new Date(Date.now() - 3599000).toISOString(),
+      },
+    ],
+  ]),
   health_checks: new Map<string, any>(),
   eval_results: new Map<string, any>(),
 };
